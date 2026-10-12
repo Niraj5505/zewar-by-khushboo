@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-ivory: #FAF7F0;
+    --accent-champagne: #C6A15B;
+    --text-espresso: #30251F;
+    --soft-sand: #EAE0D2;
+    --pure-white: #FFFFFF;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #FAF7F0;
+    color: #30251F;
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #FAF7F0;
+    color: #30251F;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #30251F;
+  }
+
+  /* Custom scrollbar matching ivory/champagne aesthetics */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FAF7F0;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #EAE0D2;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C6A15B;
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+
+  .brand-logo-script {
+    font-family: 'Alex Brush', cursive;
+  }
+
+  .brand-subhead {
+    font-family: 'Cormorant Garamond', serif;
+  }
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
