@@ -11,6 +11,8 @@ import {
   ChevronRight,
   Share2,
   Check,
+  Ruler,
+  Maximize2,
 } from 'lucide-react';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/product/ProductCard';
@@ -19,6 +21,8 @@ import { formatPaise, calculateDiscount } from '../lib/formatINR';
 import { useCartStore } from '../store/cartStore';
 import { useWishlistStore } from '../store/wishlistStore';
 import { useUIStore } from '../store/uiStore';
+import { usePopupStore } from '../store/popupStore';
+import { toast } from '../store/toastStore';
 import { BRAND } from '../lib/brand';
 
 export const Product = () => {
@@ -27,6 +31,7 @@ export const Product = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [copiedLink, setCopiedLink] = useState(false);
+  const openPopup = usePopupStore((state) => state.openPopup);
 
   const { addItem } = useCartStore();
   const { isInWishlist, toggleWishlist } = useWishlistStore();
@@ -49,8 +54,11 @@ export const Product = () => {
 
   const handleAddToCart = () => {
     addItem(product, quantity);
-    showToast(`Added ${quantity} × ${product.name} to cart`);
-    openCart();
+    toast.success(`Added ${quantity} × ${product.name} to bag`, {
+      product,
+      action: { label: 'View Bag', href: '/cart' },
+    });
+    openPopup('cart');
   };
 
   const handleBuyNow = () => {
@@ -124,7 +132,10 @@ export const Product = () => {
         {/* Left Column: Gallery (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           {/* Main Large Image (4:5 Ratio) */}
-          <div className="relative aspect-[4/5] bg-sand rounded-[4px] overflow-hidden border border-sand-border shadow-subtle group">
+          <div
+            onClick={() => openPopup('lightbox', { images: product.images, initialIndex: selectedImage })}
+            className="relative aspect-[4/5] bg-sand rounded-[4px] overflow-hidden border border-sand-border shadow-subtle group cursor-zoom-in"
+          >
             <img
               src={product.images[selectedImage] || product.images[0]}
               alt={product.name}
@@ -135,10 +146,17 @@ export const Product = () => {
                 {discount}% Off
               </span>
             )}
+            <div className="absolute bottom-3 left-3 bg-espresso/80 backdrop-blur-sm text-ivory text-[10px] uppercase font-semibold px-2.5 py-1 rounded-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pointer-events-none">
+              <Maximize2 className="w-3 h-3 text-champagne" />
+              <span>Click to Expand</span>
+            </div>
             <button
               type="button"
-              onClick={handleShare}
-              className="absolute top-3 right-3 p-2 bg-brandWhite/90 hover:bg-brandWhite rounded-full text-espresso/70 hover:text-espresso shadow-sm transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleShare();
+              }}
+              className="absolute top-3 right-3 p-2 bg-brandWhite/90 hover:bg-brandWhite rounded-full text-espresso/70 hover:text-espresso shadow-sm transition-all z-10"
               aria-label="Share product"
             >
               {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
@@ -219,6 +237,14 @@ export const Product = () => {
                 <span>{f}</span>
               </span>
             ))}
+            <button
+              type="button"
+              onClick={() => openPopup('sizeguide')}
+              className="px-3 py-1.5 bg-ivory border border-champagne/50 hover:bg-champagne/15 text-espresso text-xs font-semibold tracking-wide rounded-[2px] flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Ruler className="w-3.5 h-3.5 text-champagne-dark" />
+              <span>Size Guide</span>
+            </button>
           </div>
 
           {/* Quantity Selector & Action Buttons */}

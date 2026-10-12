@@ -5,9 +5,8 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { MobileMenu } from './components/layout/MobileMenu';
 import { SearchOverlay } from './components/layout/SearchOverlay';
-import { CartDrawer } from './components/cart/CartDrawer';
-import { QuickViewModal } from './components/product/QuickViewModal';
-import { Toast } from './components/ui/Toast';
+import { PopupRoot } from './components/popups/PopupRoot';
+import { Toaster } from './components/ui/Toaster';
 
 // Pages
 import { Home } from './pages/Home';
@@ -23,6 +22,7 @@ import { FAQ } from './pages/FAQ';
 import { ShippingPolicy } from './pages/ShippingPolicy';
 import { ReturnsPolicy } from './pages/ReturnsPolicy';
 import { NotFound } from './pages/NotFound';
+import { DevPopups } from './pages/DevPopups';
 
 function App() {
   return (
@@ -47,16 +47,18 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/shipping" element={<ShippingPolicy />} />
           <Route path="/returns" element={<ReturnsPolicy />} />
+          <Route path="/dev/popups" element={<DevPopups />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
-      {/* Global Modals & Drawers */}
+      {/* Global Navigation Drawers & Overlays */}
       <MobileMenu />
       <SearchOverlay />
-      <CartDrawer />
-      <QuickViewModal />
-      <Toast />
+
+      {/* Popup Infrastructure & Toaster */}
+      <PopupRoot />
+      <Toaster />
 
       {/* Footer */}
       <Footer />

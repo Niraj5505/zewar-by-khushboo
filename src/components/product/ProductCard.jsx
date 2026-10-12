@@ -4,13 +4,14 @@ import { Heart, Eye, ShoppingBag } from 'lucide-react';
 import { formatPaise, calculateDiscount } from '../../lib/formatINR';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
-import { useUIStore } from '../../store/uiStore';
+import { usePopupStore } from '../../store/popupStore';
+import { toast } from '../../store/toastStore';
 import { cn } from '../../lib/cn';
 
 export const ProductCard = ({ product, priority = false }) => {
   const { addItem } = useCartStore();
   const { isInWishlist, toggleWishlist } = useWishlistStore();
-  const { openQuickView, showToast, openCart } = useUIStore();
+  const openPopup = usePopupStore((state) => state.openPopup);
 
   const isFav = isInWishlist(product.id);
   const discount = calculateDiscount(product.compareAtPricePaise, product.pricePaise);
@@ -19,8 +20,11 @@ export const ProductCard = ({ product, priority = false }) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(product, 1);
-    showToast(`Added ${product.name} to cart`);
-    openCart();
+    toast.success(`Added ${product.name} to bag`, {
+      product,
+      action: { label: 'View Bag', href: '/cart' },
+    });
+    openPopup('cart');
   };
 
   const handleToggleWishlist = (e) => {
@@ -28,16 +32,16 @@ export const ProductCard = ({ product, priority = false }) => {
     e.stopPropagation();
     toggleWishlist(product.id);
     if (!isFav) {
-      showToast(`Added to your wishlist`);
+      toast.success(`Added ${product.name} to wishlist`);
     } else {
-      showToast(`Removed from wishlist`, 'info');
+      toast.info(`Removed from wishlist`);
     }
   };
 
   const handleQuickView = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    openQuickView(product);
+    openPopup('quickview', { product });
   };
 
   return (

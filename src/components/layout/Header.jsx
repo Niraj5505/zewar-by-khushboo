@@ -4,6 +4,7 @@ import { Search, ShoppingBag, Heart, User, Menu } from 'lucide-react';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 import { useUIStore } from '../../store/uiStore';
+import { usePopupStore } from '../../store/popupStore';
 import { cn } from '../../lib/cn';
 
 export const Header = () => {
@@ -12,6 +13,7 @@ export const Header = () => {
   const itemCount = useCartStore((state) => state.getItemCount());
   const wishlistCount = useWishlistStore((state) => state.items.length);
   const { openCart, openMobileMenu, openSearch } = useUIStore();
+  const openPopup = usePopupStore((state) => state.openPopup);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,7 +137,7 @@ export const Header = () => {
             {/* Cart Icon & Drawer Trigger */}
             <button
               type="button"
-              onClick={openCart}
+              onClick={() => openPopup('cart')}
               className="p-1.5 text-espresso/80 hover:text-espresso relative hover:scale-105 transition-all"
               aria-label="Cart"
             >
