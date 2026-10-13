@@ -88,6 +88,12 @@ export const Footer = () => {
               <li>
                 <Link to="/terms" className="hover:text-champagne-dark transition-colors">Terms of Service</Link>
               </li>
+              <li className="pt-2">
+                <Link to="/admin" className="text-champagne-dark hover:text-espresso font-semibold transition-colors flex items-center gap-1">
+                  <span>Back-of-House Admin</span>
+                  <span>→</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
