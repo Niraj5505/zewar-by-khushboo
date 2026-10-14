@@ -129,8 +129,8 @@ export const DataTable = ({
   return (
     <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle flex flex-col">
       {/* Table Toolbar */}
-      <div className="p-4 border-b border-sand-border/70 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-ivory/20">
-        <div className="flex flex-1 items-center gap-2 max-w-md">
+      <div className="p-3 sm:p-4 border-b border-sand-border/70 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-ivory/20">
+        <div className="flex flex-1 items-center gap-2 w-full md:max-w-md">
           <div className="relative w-full">
             <Search className="w-4 h-4 text-espresso/40 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
@@ -146,7 +146,7 @@ export const DataTable = ({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {filterComponent}
           <button
             type="button"
@@ -162,11 +162,11 @@ export const DataTable = ({
 
       {/* Bulk Actions Banner */}
       {selectedIds.length > 0 && (
-        <div className="bg-sand/40 border-b border-sand-border px-4 py-2.5 flex items-center justify-between text-xs animate-fade-in">
+        <div className="bg-sand/40 border-b border-sand-border px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs animate-fade-in">
           <span className="font-semibold text-espresso">
             {selectedIds.length} item{selectedIds.length > 1 ? 's' : ''} selected
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {bulkActions.map((action, i) => (
               <button
                 key={i}
@@ -199,12 +199,12 @@ export const DataTable = ({
       {paginatedData.length === 0 ? (
         <EmptyState title={emptyTitle} description={emptyDescription} className="border-0 shadow-none py-16" />
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-px scrollbar-thin">
           <table className="w-full text-left text-xs border-collapse">
             <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 sticky top-0 z-10">
               <tr>
                 {bulkActions.length > 0 && (
-                  <th className="w-10 px-4 py-3 text-center">
+                  <th className="w-10 px-3 sm:px-4 py-3 text-center">
                     <button
                       type="button"
                       onClick={toggleSelectAll}
@@ -223,7 +223,7 @@ export const DataTable = ({
                   <th
                     key={col.key}
                     onClick={() => handleSort(col.key, col.sortable !== false)}
-                    className={`px-4 py-3 font-semibold uppercase tracking-wider text-[11px] select-none ${
+                    className={`px-3 sm:px-4 py-3 font-semibold uppercase tracking-wider text-[11px] whitespace-nowrap select-none ${
                       col.sortable !== false ? 'cursor-pointer hover:text-espresso' : ''
                     } ${col.className || ''}`}
                   >
@@ -259,7 +259,7 @@ export const DataTable = ({
                     } ${isSelected ? 'bg-sand/30' : ''}`}
                   >
                     {bulkActions.length > 0 && (
-                      <td className="w-10 px-4 py-3 text-center" onClick={(e) => e.stopPropagation()}>
+                      <td className="w-10 px-3 sm:px-4 py-3 text-center" onClick={(e) => e.stopPropagation()}>
                         <button
                           type="button"
                           onClick={(e) => toggleSelectRow(row.id, e)}
@@ -274,7 +274,7 @@ export const DataTable = ({
                       </td>
                     )}
                     {columns.map((col) => (
-                      <td key={col.key} className={`px-4 py-3.5 align-middle ${col.className || ''}`}>
+                      <td key={col.key} className={`px-3 sm:px-4 py-3 sm:py-3.5 align-middle ${col.className || ''}`}>
                         {col.render ? col.render(row[col.key], row) : row[col.key]}
                       </td>
                     ))}
@@ -287,14 +287,14 @@ export const DataTable = ({
       )}
 
       {/* Pagination Footer */}
-      <div className="p-4 border-t border-sand-border/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-espresso/70 bg-ivory/10">
-        <div className="flex items-center gap-3">
+      <div className="p-3 sm:p-4 border-t border-sand-border/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-espresso/70 bg-ivory/10">
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 text-center sm:text-left">
           <span>
             Showing <strong className="text-espresso font-semibold">{(currentPage - 1) * pageSize + (paginatedData.length > 0 ? 1 : 0)}</strong> to{' '}
             <strong className="text-espresso font-semibold">{Math.min(currentPage * pageSize, sortedData.length)}</strong> of{' '}
             <strong className="text-espresso font-semibold">{sortedData.length}</strong> entries
           </span>
-          <div className="flex items-center gap-1.5 pl-3 border-l border-sand-border">
+          <div className="flex items-center gap-1.5 pl-2 sm:pl-3 border-l border-sand-border">
             <span>Per page:</span>
             <select
               value={pageSize}
@@ -313,12 +313,12 @@ export const DataTable = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 justify-center">
           <button
             type="button"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            className="p-1.5 border border-sand-border rounded-[2px] hover:bg-sand/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center border border-sand-border rounded-[2px] hover:bg-sand/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             aria-label="Previous page"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -330,7 +330,7 @@ export const DataTable = ({
             type="button"
             disabled={currentPage >= totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            className="p-1.5 border border-sand-border rounded-[2px] hover:bg-sand/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center border border-sand-border rounded-[2px] hover:bg-sand/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             aria-label="Next page"
           >
             <ChevronRight className="w-4 h-4" />

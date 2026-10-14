@@ -173,5 +173,112 @@ A luxury, back-of-house admin dashboard and full CMS crafted specifically for Ze
 - `/admin/settings/email` — Transactional email provider settings (Resend/SMTP), templates, and diagnostic test
 - `/admin/settings/seo` — Global meta title patterns, Google Analytics GA4, Meta Pixel, and robots.txt editor
 - `/admin/settings/users` — Admin team members, role assignments, self-delete safeguards, and capability matrix
+- `/admin/festive` — Seasonal Festive Mode (Diwali / Deepavali date scheduling, banner message, dialogue copy, preview)
 - `/admin/settings/audit` — Immutable audit log recording every mutation with JSON before/after diff inspector
+
+---
+
+## 🪔 Seasonal Festive Dressing System (Full Diwali Luxury Experience)
+
+The storefront features an on-brand, seasonal festive dressing architecture designed for high-end boutique aesthetics. It feels like an upscale jeweller's flagship store dressed for Diwali week: warm lights in the window, marigold garlands framing the door, a diya display near the entrance, and gold-foil accents on price tags.
+
+### 🏛️ Architecture & Folder Structure
+
+```text
+src/
+├── components/
+│   └── festive/
+│       ├── FestiveProvider.jsx              ← Context, body attributes & vignette mount
+│       ├── FestiveControls.jsx              ← Floating bottom-left panel with granular toggles & mobile menu view
+│       ├── ambient/
+│       │   ├── DiyaGarland.jsx              ← Top marigold-and-diya hanging garland
+│       │   ├── CornerTorans.jsx             ← Top-corner ornaments with mouse parallax on desktop
+│       │   ├── FloatingDiyas.jsx            ← Slow-rising background lamp silhouettes (auto-pauses offscreen)
+│       │   ├── SparkleCanvas.jsx            ← Non-blocking gold sparkle particles scaling with device tier
+│       │   ├── RangoliCorner.jsx            ← Subtle 60s rotating lotus rangoli SVG
+│       │   └── WarmVignette.jsx             ← Soft warm radial glow around viewport perimeter
+│       ├── hero/
+│       │   ├── DiwaliHeroScene.jsx          ← Multi-layered hero container (ambient + diyas + sparkles + torans)
+│       │   ├── DiyaScene3D.jsx              ← Procedural 3D clay diya with ~2Hz flame flicker (lazy-loaded)
+│       │   └── FestiveHeadline.jsx          ← 8s gold shimmer sweep on "Timeless Handcrafted Jewellery"
+│       ├── commerce/
+│       │   ├── FestiveBadge.jsx             ← "Diwali" pill on tagged products (Diwali > New > Sale)
+│       │   ├── GlowBorder.jsx               ← 4s pulsating gold glow border wrapper
+│       │   ├── FestivePriceTag.jsx          ← Gold foil sale price styling with sparkle icon
+│       │   ├── GiftWrapBadge.jsx            ← "Complimentary Gift Wrapping" pill & info modal
+│       │   └── DiwaliCouponCard.jsx         ← Decorated coupon card in cart (DIWALI10 / ZEWAR10)
+│       ├── sections/
+│       │   ├── DiwaliCollectionBanner.jsx   ← Full-width deep espresso (#1A1310) spotlight banner
+│       │   ├── DiwaliGifting.jsx            ← Curated gifting section with admin-selectable picks
+│       │   ├── DiwaliCountdown.jsx          ← 4-tile real-time countdown to offer end (Days/Hours/Mins/Secs)
+│       │   ├── DiwaliStory.jsx              ← Two-column brand sentiment block ("Why We Celebrate Diwali")
+│       │   └── DiwaliDivider.jsx            ← Ornamental section divider with centered Diya SVG
+│       ├── overlays/
+│       │   ├── DiwaliPopup.jsx              ← Timed 15s modal offer with one-per-season persistence
+│       │   ├── DiwaliExitIntent.jsx         ← Festive variant of exit intent with coupon & gift wrap note
+│       │   └── DiwaliConfettiBurst.jsx      ← Brand palette burst on Add to Cart and Order Confirmation
+│       └── audio/
+│           └── FestiveAmbience.jsx          ← Web Audio API tanpura drone synthesizer (0KB download, 100% royalty-free)
+├── assets/
+│   └── festive/
+│       ├── diya.svg                         ← Vector Diya with brass base and two-tone flame
+│       ├── rangoli.svg                      ← 8-petal geometric lotus rangoli line art
+│       ├── toran.svg                        ← Hanging mango leaf and marigold garland
+│       ├── marigold-garland.svg             ← Repeating horizontal marigold bloom border
+│       └── sparkle.svg                      ← Diamond starburst vector icon
+├── hooks/
+│   ├── useFestiveMode.js                    ← Master hook combining store, reduced motion, and device tier
+│   ├── usePrefersReducedMotion.js           ← Real-time listener for OS reduced motion preferences
+│   ├── useDeviceTier.js                     ← Classifies client into low / mid / high hardware tiers
+│   ├── useSparkles.js                       ← 60fps particle loop auto-paused off-screen & on tab blur
+│   ├── useScrollProgress.js                 ← Normalized scroll tracker (0 to 1)
+│   └── useFestiveCountdown.js               ← Live second-by-second countdown calculator
+└── store/
+    └── festiveStore.js                      ← Zustand store with localStorage persistence (`zewar.diwali.prefs.v1`)
+```
+
+---
+
+### ⚙️ State & Granular Preferences (`zewar.diwali.prefs.v1`)
+
+Patrons can adjust or reduce all effects via the floating Diya panel in the bottom-left corner (or via the mobile slide-out menu):
+- **Ambient**: Garland, corner torans, rangoli, floating diyas
+- **Particles**: Gold sparkles and slow-rising lamps
+- **Hero Scene**: Lighting, backdrops, and procedural 3D diya
+- **Animations**: Shimmering headlines, glowing borders, and transitions
+- **Confetti**: Auspicious particle burst on Add to Cart and Order Confirmation
+- **Ambience**: Optional soft tanpura meditative drone synthesizer (off by default, opt-in only)
+- **Presets**: "Reduce all motion" and "Reset to default"
+
+---
+
+### 🛡️ Performance, Accessibility & Safety Guarantees
+
+- **Total Added JS**: < 10KB gzipped (well below the < 60KB limit).
+- **Lazy 3D Diya**: Isolated into its own lazy chunk (`DiyaScene3D-*.js`, 1.13KB gzip) and rendered only on `deviceTier === 'high'`.
+- **Zero Layout Shift (CLS = 0)**: All decorative elements and garlands use absolute positioning with reserved heights.
+- **LCP Unaffected**: Particle canvas mounts inside `requestIdleCallback`.
+- **prefers-reduced-motion: reduce**: Automatically disables all canvas sparkles, floating diyas, rotational rangoli, and shimmering animations.
+- **Admin Control**: Complete management at **Admin → Marketing → Festive Mode** (`/admin/festive`) with instant preview trigger (`/?festive=preview`).
+- **Clean Removability**: To completely remove the festive system, delete `src/components/festive/` and `src/assets/festive/`, and remove the 3 import lines from `App.jsx`.
+
+---
+
+### 🎨 How to Reuse for Next Year or Other Festivals (Holi, Raksha Bandhan, Christmas, Eid)
+
+The entire seasonal architecture is modular and parameter-driven. To adapt for another festival:
+1. **Change the 3 CSS Palette Variables** in `src/index.css`:
+   ```css
+   :root {
+     --festive-accent: #E8A33D; /* Holi: #FF4081 (Gulal Pink) | Eid: #10B981 (Emerald) | Christmas: #DC2626 (Ruby) */
+     --festive-deep:   #B33A2B; /* Holi: #9C27B0 (Royal Purple) | Eid: #047857 (Forest) | Christmas: #15803D (Evergreen) */
+     --festive-glow:   rgba(198, 161, 91, 0.35); /* Soft ambient aura */
+   }
+   ```
+2. **Swap the Vector Assets** in `src/assets/festive/`:
+   - Replace `diya.svg`, `toran.svg`, and `rangoli.svg` with festival-specific icons (e.g. pichkari/gulal for Holi, crescent/star for Eid, or bell/holly for Christmas).
+3. **Update Date Window & Copy** in **Admin → Marketing → Festive Mode**:
+   - Set the festival's start and end dates.
+   - Adjust banner, coupon (`DIWALI10` → `HOLI10` / `EID10`), and story text.
+
 

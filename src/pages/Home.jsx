@@ -5,6 +5,19 @@ import { InstagramIcon } from '../components/ui/Icons';
 import { ProductCard } from '../components/product/ProductCard';
 import { PRODUCTS, CATEGORIES } from '../data/products';
 import { BRAND } from '../lib/brand';
+import { SparkleLayer } from '../components/festive/SparkleLayer';
+import { DiyaDivider } from '../components/festive/DiyaDivider';
+import { GlowBorder } from '../components/festive/GlowBorder';
+import { DiwaliHeroScene } from '../components/festive/hero/DiwaliHeroScene';
+import { FestiveHeadline } from '../components/festive/hero/FestiveHeadline';
+import { DiwaliCollectionBanner } from '../components/festive/sections/DiwaliCollectionBanner';
+import { DiwaliGifting } from '../components/festive/sections/DiwaliGifting';
+import { DiwaliCountdown } from '../components/festive/sections/DiwaliCountdown';
+import { DiwaliStory } from '../components/festive/sections/DiwaliStory';
+
+const DiyaScene3D = React.lazy(() =>
+  import('../components/festive/hero/DiyaScene3D').then((m) => ({ default: m.DiyaScene3D }))
+);
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -14,21 +27,30 @@ export const Home = () => {
     <div className="space-y-16 sm:space-y-24 pb-16">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-4 sm:pt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
-            {/* Left Hero Content (6 cols) */}
-            <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-left py-4 sm:py-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-sand/60 border border-sand-border/80 rounded-full text-espresso text-[11px] tracking-wider uppercase font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-champagne" />
-                <span>Heirloom Indian Craftsmanship</span>
-              </div>
+      <section className="relative pt-4 sm:pt-8 overflow-hidden">
+        <DiwaliHeroScene>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Hero Content (6 cols) */}
+              <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-left py-4 sm:py-8">
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-sand/60 border border-sand-border/80 rounded-full text-espresso text-[11px] tracking-wider uppercase font-semibold">
+                    <Sparkles className="w-3.5 h-3.5 text-champagne" />
+                    <span>Heirloom Indian Craftsmanship</span>
+                  </div>
+                  {/* Subtle 3D Diya beside badge on high-tier devices */}
+                  <div className="hidden sm:block">
+                    <React.Suspense fallback={null}>
+                      <DiyaScene3D size={44} />
+                    </React.Suspense>
+                  </div>
+                </div>
 
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-espresso font-medium leading-[1.15] tracking-tight">
-                  Timeless Handcrafted Jewellery
-                </h1>
+                <div className="space-y-3 sm:space-y-4">
+                  <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-espresso font-medium leading-[1.15] tracking-tight">
+                    <FestiveHeadline>Timeless Handcrafted Jewellery</FestiveHeadline>
+                  </h1>
                 <p className="font-sans text-sm sm:text-base text-espresso/75 leading-relaxed max-w-lg">
                   Each piece tells a story — of tradition, artistry and you. Discover curated Kundan, pearl, and meenakari heirlooms made to be cherished.
                 </p>
@@ -65,7 +87,11 @@ export const Home = () => {
 
           </div>
         </div>
+        </DiwaliHeroScene>
       </section>
+
+      {/* Seasonal Countdown Window (only renders if configured & active) */}
+      <DiwaliCountdown />
 
       {/* 2. TRUST INDICATORS BAR */}
       <section className="border-y border-sand-border bg-[#F8F4EC]/80 py-6 sm:py-8">
@@ -133,42 +159,47 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Seasonal Diwali Collection Banner */}
+      <DiwaliCollectionBanner />
+
       {/* 4. BRAND CRAFTSMANSHIP / EDITORIAL BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#EAE0D2]/50 border border-sand-border rounded-[4px] overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
-            
-            {/* Left Editorial text */}
-            <div className="lg:col-span-6 p-8 sm:p-12 lg:p-16 space-y-6">
-              <span className="eyebrow text-champagne-dark">Our Philosophy</span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-espresso font-medium leading-snug">
-                More Than Just Jewellery<br />It's a Feeling
-              </h2>
-              <p className="font-sans text-sm sm:text-base text-espresso/75 leading-relaxed max-w-md">
-                Zewar by Khushboo brings you handcrafted designs that blend tradition with modern elegance. Every pearl is knotted by hand, every stone framed in gold foil with reverence.
-              </p>
-              <div className="pt-2">
-                <Link
-                  to="/shop"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[2px] hover:bg-espresso-light transition-all"
-                >
-                  <span>Explore Collections</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-champagne" />
-                </Link>
+        <GlowBorder>
+          <div className="bg-[#EAE0D2]/50 border border-sand-border rounded-[4px] overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
+              
+              {/* Left Editorial text */}
+              <div className="lg:col-span-6 p-8 sm:p-12 lg:p-16 space-y-6">
+                <span className="eyebrow text-champagne-dark">Our Philosophy</span>
+                <h2 className="font-serif text-3xl sm:text-4xl text-espresso font-medium leading-snug">
+                  More Than Just Jewellery<br />It's a Feeling
+                </h2>
+                <p className="font-sans text-sm sm:text-base text-espresso/75 leading-relaxed max-w-md">
+                  Zewar by Khushboo brings you handcrafted designs that blend tradition with modern elegance. Every pearl is knotted by hand, every stone framed in gold foil with reverence.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/shop"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[2px] hover:bg-espresso-light transition-all"
+                  >
+                    <span>Explore Collections</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-champagne" />
+                  </Link>
+                </div>
               </div>
-            </div>
 
-            {/* Right Hand / Bracelet Photo */}
-            <div className="lg:col-span-6 h-72 sm:h-96 lg:h-full relative overflow-hidden bg-sand">
-              <img
-                src="/images/brand-story.jpg"
-                alt="Zewar Craftsmanship Handcrafted Kundan Bracelet"
-                className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
-              />
-            </div>
+              {/* Right Hand / Bracelet Photo */}
+              <div className="lg:col-span-6 h-72 sm:h-96 lg:h-full relative overflow-hidden bg-sand">
+                <img
+                  src="/images/brand-story.jpg"
+                  alt="Zewar Craftsmanship Handcrafted Kundan Bracelet"
+                  className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
+                />
+              </div>
 
+            </div>
           </div>
-        </div>
+        </GlowBorder>
       </section>
 
       {/* 5. OUR COLLECTIONS */}
@@ -211,6 +242,15 @@ export const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* Seasonal Curated Gifting Section */}
+      <DiwaliGifting />
+
+      {/* Seasonal Brand Story Note */}
+      <DiwaliStory />
+
+      {/* Seasonal Diya Divider */}
+      <DiyaDivider />
 
       {/* 6. TESTIMONIALS */}
       <section className="bg-[#FAF7F0] border-y border-sand-border py-16 sm:py-20">
@@ -264,6 +304,9 @@ export const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Seasonal Diya Divider */}
+      <DiyaDivider />
 
       {/* 7. INSTAGRAM GALLERY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">

@@ -45,7 +45,7 @@ export const Login = () => {
   return (
     <div className="min-h-screen bg-[#FAF7F0] flex flex-col justify-center items-center p-4 selection:bg-champagne selection:text-espresso">
       {/* Container Card */}
-      <div className="w-full max-w-[400px] bg-white border border-sand-border/80 rounded-[4px] shadow-hover p-8 relative">
+      <div className="w-full max-w-[400px] bg-white border border-sand-border/80 rounded-[4px] shadow-hover p-5 sm:p-8 relative">
         {/* Top Gold Bar */}
         <div className="h-1 bg-gradient-to-r from-champagne via-champagne-light to-champagne absolute top-0 left-0 right-0 rounded-t-[4px]" />
 
@@ -145,7 +145,7 @@ export const Login = () => {
           <p className="text-[10px] font-bold uppercase tracking-wider text-espresso/40">
             Quick One-Click Demo Access
           </p>
-          <div className="grid grid-cols-3 gap-2 text-[10px]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px]">
             <button
               type="button"
               onClick={() => handleQuickLogin('khushboo@zewar.com')}

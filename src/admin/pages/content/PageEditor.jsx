@@ -63,12 +63,12 @@ export const PageEditor = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto">
           <a
             href={`/${page.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-2 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold rounded flex items-center gap-1"
+            className="flex-1 sm:flex-none justify-center px-3 py-2 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold rounded flex items-center gap-1"
           >
             <Eye className="w-3.5 h-3.5 text-champagne-dark" />
             <span>Storefront View</span>
@@ -76,7 +76,7 @@ export const PageEditor = () => {
           <button
             type="button"
             onClick={handleSave}
-            className="inline-flex items-center gap-2 px-5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+            className="flex-1 sm:flex-none justify-center inline-flex items-center gap-2 px-5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
           >
             {saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
             <span>{saved ? 'Saved!' : 'Save Page'}</span>
@@ -84,7 +84,7 @@ export const PageEditor = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-6 max-w-4xl">
+      <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-6 max-w-4xl">
         <div className="flex items-center justify-between p-3 bg-ivory/50 border border-sand-border rounded">
           <div>
             <p className="text-xs font-semibold text-espresso">Publication Status</p>

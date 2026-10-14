@@ -37,6 +37,7 @@ export const useCmsStore = create(
         token: "jwt_zewar_admin_session_token",
       },
       isSidebarCollapsed: false,
+      isMobileSidebarOpen: false,
       globalSearchQuery: "",
 
       // Data collections
@@ -66,6 +67,9 @@ export const useCmsStore = create(
       // UI Actions
       toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
       setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
+      toggleMobileSidebar: () => set((state) => ({ isMobileSidebarOpen: !state.isMobileSidebarOpen })),
+      setMobileSidebarOpen: (open) => set({ isMobileSidebarOpen: open }),
+      closeMobileSidebar: () => set({ isMobileSidebarOpen: false }),
       setGlobalSearchQuery: (query) => set({ globalSearchQuery: query }),
 
       // Admin Auth Actions

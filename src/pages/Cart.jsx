@@ -6,6 +6,8 @@ import { useWishlistStore } from '../store/wishlistStore';
 import { useUIStore } from '../store/uiStore';
 import { formatPaise } from '../lib/formatINR';
 import { BRAND } from '../lib/brand';
+import { DiwaliCouponCard } from '../components/festive/commerce/DiwaliCouponCard';
+import { GiftWrapBadge } from '../components/festive/commerce/GiftWrapBadge';
 
 export const Cart = () => {
   const navigate = useNavigate();
@@ -202,6 +204,23 @@ export const Cart = () => {
             </div>
           </div>
 
+          {/* Seasonal Festive Offer Card */}
+          <DiwaliCouponCard
+            code="DIWALI10"
+            description="Special Diwali blessing: 10% complimentary festive celebration savings."
+            onApply={(code) => {
+              const res = applyCoupon(code);
+              if (res.success) {
+                showToast(res.message, 'success');
+              }
+            }}
+            isApplied={appliedCoupon === 'DIWALI10'}
+          />
+
+          <div className="flex justify-start">
+            <GiftWrapBadge />
+          </div>
+
           {/* Coupon Entry Box */}
           <div className="p-5 bg-brandWhite border border-sand-border rounded-[3px] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             <div className="space-y-1">
@@ -210,7 +229,7 @@ export const Cart = () => {
                 <span>Apply Coupon</span>
               </div>
               <p className="text-xs text-espresso/60">
-                Use code <strong className="text-espresso font-mono">ZEWAR10</strong> for 10% off your order.
+                Use code <strong className="text-espresso font-mono">DIWALI10</strong> or <strong className="text-espresso font-mono">ZEWAR10</strong> for 10% off.
               </p>
             </div>
 

@@ -85,7 +85,7 @@ export const CustomerDetail = () => {
         <button
           type="button"
           onClick={() => setEmailModalOpen(true)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+          className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
         >
           <Mail className="w-3.5 h-3.5" />
           <span>Send Personal Email</span>
@@ -96,7 +96,7 @@ export const CustomerDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (8 cols): Order History */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle p-6 space-y-4">
+          <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle p-4 sm:p-6 space-y-4">
             <h2 className="font-serif text-base font-medium text-espresso pb-3 border-b border-sand-border/70 flex items-center justify-between">
               <span>Order History</span>
               <span className="text-xs font-sans text-espresso/60 font-normal">
@@ -109,8 +109,8 @@ export const CustomerDetail = () => {
                 This customer has not placed any orders yet.
               </p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
+              <div className="overflow-x-auto -mx-2 px-2 scrollbar-thin">
+                <table className="w-full text-left text-xs whitespace-nowrap">
                   <thead>
                     <tr className="border-b border-sand-border text-espresso/60 font-semibold uppercase text-[10px]">
                       <th className="pb-2">Order #</th>
@@ -154,7 +154,7 @@ export const CustomerDetail = () => {
           </div>
 
           {/* Delivery Addresses */}
-          <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle p-6 space-y-3">
+          <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle p-4 sm:p-6 space-y-3">
             <h2 className="font-serif text-base font-medium text-espresso pb-2 border-b border-sand-border/70">
               Saved Shipping Addresses
             </h2>
@@ -257,7 +257,7 @@ export const CustomerDetail = () => {
       {/* Send Email Modal */}
       {emailModalOpen && (
         <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-6 space-y-4">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-4 sm:p-6 max-h-[90vh] overflow-y-auto space-y-4">
             <h3 className="font-serif text-lg font-medium text-espresso">
               Send Email to {customer.name}
             </h3>

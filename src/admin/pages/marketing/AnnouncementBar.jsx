@@ -82,7 +82,7 @@ export const AnnouncementBar = () => {
       </div>
 
       {/* Editor Form */}
-      <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-6 max-w-2xl">
+      <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-6 max-w-2xl">
         <div className="flex items-center justify-between p-3 bg-ivory/60 border border-sand-border rounded">
           <div>
             <p className="text-xs font-semibold text-espresso">Enable Announcement Banner</p>

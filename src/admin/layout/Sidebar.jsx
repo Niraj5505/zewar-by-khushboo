@@ -13,6 +13,7 @@ import {
   Megaphone,
   Layout,
   Sparkles,
+  Flame,
   Mail,
   FileText,
   MessageSquareQuote,
@@ -31,6 +32,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  X,
 } from 'lucide-react';
 import { useCmsStore } from '../lib/cmsStore';
 import { useAuth } from '../hooks/useAuth';
@@ -67,6 +69,7 @@ export const NAV_SECTIONS = [
   {
     eyebrow: 'Marketing',
     items: [
+      { name: 'Festive Mode', path: '/admin/festive', icon: Flame },
       { name: 'Coupons', path: '/admin/coupons', icon: Tag },
       { name: 'Announcement', path: '/admin/announcement', icon: Megaphone },
       { name: 'Homepage', path: '/admin/homepage', icon: Layout },
@@ -113,48 +116,61 @@ export const NAV_SECTIONS = [
 export const Sidebar = () => {
   const isCollapsed = useCmsStore((s) => s.isSidebarCollapsed);
   const toggleSidebar = useCmsStore((s) => s.toggleSidebar);
+  const isMobileOpen = useCmsStore((s) => s.isMobileSidebarOpen);
+  const closeMobile = useCmsStore((s) => s.closeMobileSidebar);
   const { user } = useAuth();
 
   return (
     <aside
-      className={`fixed top-0 left-0 bottom-0 z-40 bg-[#FAF7F0] border-r border-sand-border transition-all duration-300 flex flex-col select-none ${
-        isCollapsed ? 'w-[72px]' : 'w-[260px]'
-      }`}
+      className={`fixed top-0 left-0 bottom-0 z-50 lg:z-40 bg-[#FAF7F0] border-r border-sand-border transition-all duration-300 flex flex-col select-none w-[280px] max-w-[85vw] lg:max-w-none ${
+        isMobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
+      } ${isCollapsed ? 'lg:w-[72px]' : 'lg:w-[260px]'}`}
     >
       {/* Brand Header */}
       <div className="h-16 px-4 flex items-center justify-between border-b border-sand-border/80 bg-white/70">
         <Link
           to="/admin"
+          onClick={() => closeMobile()}
           className={`flex items-center gap-2 overflow-hidden transition-all ${
-            isCollapsed ? 'justify-center w-full' : ''
+            isCollapsed ? 'lg:justify-center lg:w-full' : ''
           }`}
           title="Zewar Admin"
         >
           <div className="w-8 h-8 rounded-[2px] bg-espresso text-champagne flex items-center justify-center font-serif font-bold text-sm shadow-sm flex-shrink-0">
             Z
           </div>
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="font-serif text-base font-semibold text-espresso tracking-tight leading-none">
-                ZEWAR
-              </span>
-              <span className="font-serif italic text-[10px] text-champagne-dark leading-tight tracking-wider">
-                Admin Panel
-              </span>
-            </div>
-          )}
+          <div className={`flex flex-col ${isCollapsed ? 'lg:hidden' : 'flex'}`}>
+            <span className="font-serif text-base font-semibold text-espresso tracking-tight leading-none">
+              ZEWAR
+            </span>
+            <span className="font-serif italic text-[10px] text-champagne-dark leading-tight tracking-wider">
+              Admin Panel
+            </span>
+          </div>
         </Link>
+
+        {/* Mobile Close Button */}
+        <button
+          type="button"
+          onClick={closeMobile}
+          className="lg:hidden p-1.5 text-espresso/60 hover:text-espresso hover:bg-sand/40 rounded transition-colors"
+          aria-label="Close sidebar"
+        >
+          <X className="w-5 h-5 text-espresso" />
+        </button>
       </div>
 
       {/* Navigation List */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2 space-y-5 scrollbar-thin">
         {NAV_SECTIONS.map((section, idx) => (
           <div key={idx} className="space-y-1">
-            {!isCollapsed && (
-              <p className="px-3 text-[10px] uppercase font-bold tracking-widest text-espresso/40 font-sans">
-                {section.eyebrow}
-              </p>
-            )}
+            <p
+              className={`px-3 text-[10px] uppercase font-bold tracking-widest text-espresso/40 font-sans ${
+                isCollapsed ? 'lg:hidden' : 'block'
+              }`}
+            >
+              {section.eyebrow}
+            </p>
             <div className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon;
@@ -163,19 +179,20 @@ export const Sidebar = () => {
                     key={item.path}
                     to={item.path}
                     end={item.exact}
+                    onClick={() => closeMobile()}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2 rounded-[2px] text-xs font-medium transition-all ${
+                      `flex items-center gap-3 px-3 py-2.5 sm:py-2 rounded-[2px] text-xs font-medium transition-all ${
                         isActive
                           ? 'border-l-[3px] border-champagne bg-champagne/15 text-espresso font-semibold shadow-xs'
                           : 'border-l-[3px] border-transparent text-espresso/70 hover:text-espresso hover:bg-sand/40'
-                      } ${isCollapsed ? 'justify-center px-0' : ''}`
+                      } ${isCollapsed ? 'lg:justify-center lg:px-0' : ''}`
                     }
                     title={isCollapsed ? item.name : undefined}
                   >
                     <Icon className="w-[18px] h-[18px] flex-shrink-0 text-espresso/70" />
-                    {!isCollapsed && (
-                      <span className="truncate font-sans">{item.name}</span>
-                    )}
+                    <span className={`truncate font-sans ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
+                      {item.name}
+                    </span>
                   </NavLink>
                 );
               })}
@@ -184,23 +201,25 @@ export const Sidebar = () => {
         ))}
       </div>
 
-      {/* Collapse Toggle Footer */}
+      {/* Collapse Toggle / Storefront Footer */}
       <div className="p-3 border-t border-sand-border/80 bg-white/70 flex items-center justify-between">
-        {!isCollapsed && (
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-[11px] text-espresso/60 hover:text-espresso font-semibold tracking-wider uppercase transition-colors"
-          >
-            <ExternalLink className="w-3.5 h-3.5 text-champagne-dark" />
-            <span>Storefront</span>
-          </a>
-        )}
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`items-center gap-1.5 text-[11px] text-espresso/60 hover:text-espresso font-semibold tracking-wider uppercase transition-colors ${
+            isCollapsed ? 'hidden lg:hidden' : 'flex'
+          }`}
+        >
+          <ExternalLink className="w-3.5 h-3.5 text-champagne-dark" />
+          <span>Storefront</span>
+        </a>
+
+        {/* Desktop Collapse Button */}
         <button
           type="button"
           onClick={toggleSidebar}
-          className={`p-1.5 rounded-[2px] border border-sand-border hover:bg-sand/40 text-espresso/70 hover:text-espresso transition-colors ${
+          className={`hidden lg:flex p-1.5 rounded-[2px] border border-sand-border hover:bg-sand/40 text-espresso/70 hover:text-espresso transition-colors ${
             isCollapsed ? 'mx-auto' : ''
           }`}
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}

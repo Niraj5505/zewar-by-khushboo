@@ -5,6 +5,7 @@ import { InstagramIcon } from '../ui/Icons';
 import { useUIStore } from '../../store/uiStore';
 import { BRAND } from '../../lib/brand';
 import { cn } from '../../lib/cn';
+import { FestiveControls } from '../festive/FestiveControls';
 
 export const MobileMenu = () => {
   const { isMobileMenuOpen, closeMobileMenu, openCart } = useUIStore();
@@ -82,6 +83,9 @@ export const MobileMenu = () => {
 
         {/* Footer info in menu */}
         <div className="p-5 border-t border-sand-border bg-[#F5EFE6]/50 space-y-4">
+          {/* Mobile Festive Preferences Toggle */}
+          <FestiveControls inline={true} />
+
           <div className="flex items-center gap-3">
             <a
               href={BRAND.instagramUrl}

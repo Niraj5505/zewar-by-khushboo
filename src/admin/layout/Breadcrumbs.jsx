@@ -40,10 +40,10 @@ export const Breadcrumbs = () => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <nav className="flex items-center space-x-1.5 text-xs text-espresso/60 font-sans" aria-label="Breadcrumb">
+    <nav className="flex items-center space-x-1 sm:space-x-1.5 text-xs text-espresso/60 font-sans overflow-hidden whitespace-nowrap min-w-0" aria-label="Breadcrumb">
       <Link
         to="/admin"
-        className="inline-flex items-center gap-1 hover:text-espresso transition-colors text-espresso/70"
+        className="inline-flex items-center gap-1 hover:text-espresso transition-colors text-espresso/70 flex-shrink-0"
       >
         <Home className="w-3.5 h-3.5 text-champagne-dark" />
         <span className="hidden sm:inline">Admin</span>
@@ -58,13 +58,13 @@ export const Breadcrumbs = () => {
           <React.Fragment key={routeTo}>
             <ChevronRight className="w-3 h-3 text-espresso/30 flex-shrink-0" />
             {isLast ? (
-              <span className="font-semibold text-espresso capitalize truncate max-w-[150px] sm:max-w-none">
+              <span className="font-semibold text-espresso capitalize truncate max-w-[110px] xs:max-w-[160px] sm:max-w-none">
                 {label}
               </span>
             ) : (
               <Link
                 to={routeTo}
-                className="hover:text-espresso transition-colors capitalize truncate max-w-[120px] sm:max-w-none"
+                className="hover:text-espresso transition-colors capitalize truncate max-w-[80px] sm:max-w-none hidden xs:inline"
               >
                 {label}
               </Link>

@@ -50,11 +50,11 @@ export const InstagramFeed = () => {
         description="Curate live social photographs linked to @zewar_by_khushboo for the storefront carousel."
         badge={`${feed.length} Posts`}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={handleAddPost}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-sand-border hover:bg-sand/30 text-espresso font-semibold text-xs rounded"
+            className="flex-1 sm:flex-none justify-center inline-flex items-center gap-1.5 px-3.5 py-2 border border-sand-border hover:bg-sand/30 text-espresso font-semibold text-xs rounded"
           >
             <Plus className="w-3.5 h-3.5 text-champagne-dark" />
             <span>Add Post</span>
@@ -62,7 +62,7 @@ export const InstagramFeed = () => {
           <button
             type="button"
             onClick={handleSave}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] shadow-sm"
+            className="flex-1 sm:flex-none justify-center inline-flex items-center gap-1.5 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] shadow-sm"
           >
             {saved ? <CheckCircle className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
             <span>Save Feed</span>
@@ -71,31 +71,33 @@ export const InstagramFeed = () => {
       </PageHeader>
 
       {/* Feed Mode Switcher */}
-      <div className="flex items-center gap-3 p-4 bg-white border border-sand-border/80 rounded-[4px] shadow-subtle text-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white border border-sand-border/80 rounded-[4px] shadow-subtle text-xs">
         <span className="font-semibold text-espresso">Feed Synchronization:</span>
-        <button
-          type="button"
-          onClick={() => setFeedMode('manual')}
-          className={`px-3 py-1 rounded-[2px] font-medium ${
-            feedMode === 'manual'
-              ? 'bg-espresso text-ivory font-semibold'
-              : 'border border-sand-border hover:bg-sand/30 text-espresso'
-          }`}
-        >
-          Manual Curation (Fast & Reliable)
-        </button>
-        <button
-          type="button"
-          onClick={() => setFeedMode('api')}
-          className={`px-3 py-1 rounded-[2px] font-medium flex items-center gap-1 ${
-            feedMode === 'api'
-              ? 'bg-espresso text-ivory font-semibold'
-              : 'border border-sand-border hover:bg-sand/30 text-espresso'
-          }`}
-        >
-          <span>Instagram Graph API</span>
-          <span className="text-[10px] text-amber-700 bg-amber-100 px-1 rounded">Needs Token</span>
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setFeedMode('manual')}
+            className={`px-3 py-1 rounded-[2px] font-medium ${
+              feedMode === 'manual'
+                ? 'bg-espresso text-ivory font-semibold'
+                : 'border border-sand-border hover:bg-sand/30 text-espresso'
+            }`}
+          >
+            Manual Curation (Fast & Reliable)
+          </button>
+          <button
+            type="button"
+            onClick={() => setFeedMode('api')}
+            className={`px-3 py-1 rounded-[2px] font-medium flex items-center gap-1 ${
+              feedMode === 'api'
+                ? 'bg-espresso text-ivory font-semibold'
+                : 'border border-sand-border hover:bg-sand/30 text-espresso'
+            }`}
+          >
+            <span>Instagram Graph API</span>
+            <span className="text-[10px] text-amber-700 bg-amber-100 px-1 rounded">Needs Token</span>
+          </button>
+        </div>
       </div>
 
       {feedMode === 'api' && (

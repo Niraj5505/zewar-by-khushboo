@@ -77,7 +77,7 @@ export const PinCodeServiceability = () => {
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center gap-2 px-5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+          className="w-full sm:w-auto justify-center inline-flex items-center gap-2 px-5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
         >
           {saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
           <span>{saved ? 'Updated Live!' : 'Save PIN Rules'}</span>
@@ -86,7 +86,7 @@ export const PinCodeServiceability = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Settings Form (8 cols) */}
-        <form onSubmit={handleSave} className="lg:col-span-8 bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-6">
+        <form onSubmit={handleSave} className="lg:col-span-8 bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-6">
           <div>
             <h3 className="font-serif text-base font-medium text-espresso pb-2 border-b border-sand-border/70">
               Serviceability Coverage Mode

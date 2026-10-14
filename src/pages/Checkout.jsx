@@ -18,6 +18,8 @@ import { useAuthStore } from '../store/authStore';
 import { useUIStore } from '../store/uiStore';
 import { formatPaise } from '../lib/formatINR';
 import { BRAND } from '../lib/brand';
+import { triggerFestiveConfetti } from '../components/festive/overlays/DiwaliConfettiBurst';
+import { DiyaIcon } from '../components/festive/DiyaIcon';
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -110,6 +112,7 @@ export const Checkout = () => {
       setIsProcessing(false);
       setStep(4);
       clearCart();
+      triggerFestiveConfetti();
       showToast(`Order confirmed successfully! Order #${generatedId}`, 'success');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1800);
@@ -130,6 +133,11 @@ export const Checkout = () => {
           <p className="text-sm text-espresso/70">
             Order Reference: <strong className="text-espresso font-mono">{orderId}</strong>
           </p>
+        </div>
+
+        <div className="p-3.5 bg-sand/40 border border-champagne/40 rounded-[3px] text-xs text-espresso/80 flex items-center justify-center gap-2">
+          <DiyaIcon className="w-4 h-4 text-champagne-dark flex-shrink-0" />
+          <span>Your heirlooms will be enclosed in complimentary Diwali gift packaging with handwritten greetings.</span>
         </div>
 
         <div className="bg-brandWhite border border-sand-border rounded-[4px] p-6 text-left space-y-4 text-xs sm:text-sm">

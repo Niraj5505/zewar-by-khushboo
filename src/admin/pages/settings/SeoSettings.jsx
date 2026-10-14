@@ -40,7 +40,7 @@ export const SeoSettings = () => {
         </button>
       </PageHeader>
 
-      <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-6 max-w-3xl">
+      <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-6 max-w-3xl">
         <div className="space-y-4">
           <h3 className="font-serif text-base font-medium text-espresso pb-2 border-b border-sand-border/70">
             Default Meta Tags

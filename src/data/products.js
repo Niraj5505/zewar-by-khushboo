@@ -93,6 +93,7 @@ export const PRODUCTS = [
     compareAtPricePaise: 229900, // ₹2,299
     isBestSeller: true,
     isNewArrival: false,
+    festive: true,
     rating: 4.9,
     reviewCount: 45,
     stock: 16,
@@ -177,6 +178,7 @@ export const PRODUCTS = [
     compareAtPricePaise: 359900, // ₹3,599
     isBestSeller: false,
     isNewArrival: true,
+    festive: true,
     rating: 5.0,
     reviewCount: 38,
     stock: 7,

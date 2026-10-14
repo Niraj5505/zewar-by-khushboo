@@ -97,7 +97,7 @@ export const SalesReport = () => {
         />
       </div>
 
-      <div className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-4">
+      <div className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h2 className="font-serif text-base font-medium text-espresso">
             Revenue Over Time (₹ INR)

@@ -40,12 +40,12 @@ export const PagesList = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-sand-border/60 text-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 border-t border-sand-border/60 text-xs">
               <span className="text-[11px] text-espresso/40">
                 Updated: {page.updatedAt || 'Recently'}
               </span>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                 <a
                   href={`/${page.slug}`}
                   target="_blank"

@@ -279,32 +279,32 @@ export const ProductEditor = () => {
         <div className="flex items-center gap-3">
           <Link
             to="/admin/products"
-            className="p-2 border border-sand-border hover:bg-sand/30 rounded-[2px] text-espresso/70 hover:text-espresso transition-colors"
+            className="p-2 border border-sand-border hover:bg-sand/30 rounded-[2px] text-espresso/70 hover:text-espresso transition-colors flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
-          <div>
-            <h1 className="font-serif text-2xl font-medium text-espresso">
+          <div className="min-w-0">
+            <h1 className="font-serif text-xl sm:text-2xl font-medium text-espresso truncate">
               {isEditing ? `Edit: ${formData.name || 'Product'}` : 'Create New Product'}
             </h1>
-            <p className="font-sans text-xs text-espresso/60">
+            <p className="font-sans text-xs text-espresso/60 truncate">
               Configure product details, photography, pricing in INR, and inventory rules.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
           <button
             type="button"
             onClick={() => navigate('/admin/products')}
-            className="px-4 py-2 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold uppercase tracking-wider rounded-[2px] transition-colors"
+            className="flex-1 sm:flex-none px-4 py-2 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold uppercase tracking-wider rounded-[2px] transition-colors text-center"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="inline-flex items-center gap-2 px-5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
           >
             {isSaved ? <CheckCircle className="w-4 h-4 text-espresso" /> : <Save className="w-4 h-4" />}
             <span>{isSaved ? 'Saved!' : 'Save Product'}</span>
@@ -313,7 +313,7 @@ export const ProductEditor = () => {
       </div>
 
       {/* Tabs Bar */}
-      <div className="flex border-b border-sand-border overflow-x-auto scrollbar-none gap-2 bg-white px-2 py-1.5 rounded-[4px] shadow-xs">
+      <div className="flex border-b border-sand-border overflow-x-auto scrollbar-none gap-2 bg-white px-2 py-1.5 rounded-[4px] shadow-xs flex-nowrap">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -322,7 +322,7 @@ export const ProductEditor = () => {
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-[2px] text-xs font-medium whitespace-nowrap transition-all ${
+              className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-[2px] text-xs font-medium whitespace-nowrap transition-all flex-shrink-0 ${
                 isActive
                   ? 'bg-espresso text-ivory font-semibold shadow-xs'
                   : 'text-espresso/70 hover:text-espresso hover:bg-sand/30'
@@ -336,7 +336,7 @@ export const ProductEditor = () => {
       </div>
 
       {/* Tab Panels */}
-      <form onSubmit={handleSubmit} className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle">
+      <form onSubmit={handleSubmit} className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle">
         {/* 1. BASIC INFO */}
         {activeTab === 'basic' && (
           <div className="space-y-6 max-w-3xl">
@@ -583,9 +583,10 @@ export const ProductEditor = () => {
                 {formData.variants.map((v, idx) => (
                   <div
                     key={v.id || idx}
-                    className="grid grid-cols-12 gap-2 p-3 bg-ivory/30 border border-sand-border rounded-[2px] items-center text-xs"
+                    className="flex flex-col sm:grid sm:grid-cols-12 gap-2 p-3 bg-ivory/30 border border-sand-border rounded-[2px] text-xs"
                   >
-                    <div className="col-span-4">
+                    <div className="sm:col-span-4">
+                      <label className="text-[10px] text-espresso/50 font-semibold uppercase sm:hidden block mb-0.5">Name</label>
                       <input
                         type="text"
                         value={v.name}
@@ -594,7 +595,8 @@ export const ProductEditor = () => {
                         className="w-full px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs outline-none"
                       />
                     </div>
-                    <div className="col-span-3">
+                    <div className="sm:col-span-3">
+                      <label className="text-[10px] text-espresso/50 font-semibold uppercase sm:hidden block mb-0.5">SKU</label>
                       <input
                         type="text"
                         value={v.sku}
@@ -603,29 +605,34 @@ export const ProductEditor = () => {
                         className="w-full px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs font-mono outline-none"
                       />
                     </div>
-                    <div className="col-span-2">
-                      <input
-                        type="number"
-                        value={v.priceRupees}
-                        onChange={(e) => handleVariantChange(idx, 'priceRupees', Number(e.target.value))}
-                        placeholder="₹ Price"
-                        className="w-full px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs outline-none"
-                      />
+                    <div className="flex gap-2 sm:contents">
+                      <div className="flex-1 sm:col-span-2">
+                        <label className="text-[10px] text-espresso/50 font-semibold uppercase sm:hidden block mb-0.5">Price (₹)</label>
+                        <input
+                          type="number"
+                          value={v.priceRupees}
+                          onChange={(e) => handleVariantChange(idx, 'priceRupees', Number(e.target.value))}
+                          placeholder="₹ Price"
+                          className="w-full px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs outline-none"
+                        />
+                      </div>
+                      <div className="flex-1 sm:col-span-2">
+                        <label className="text-[10px] text-espresso/50 font-semibold uppercase sm:hidden block mb-0.5">Stock</label>
+                        <input
+                          type="number"
+                          value={v.stock}
+                          onChange={(e) => handleVariantChange(idx, 'stock', Number(e.target.value))}
+                          placeholder="Stock"
+                          className="w-full px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs outline-none"
+                        />
+                      </div>
                     </div>
-                    <div className="col-span-2">
-                      <input
-                        type="number"
-                        value={v.stock}
-                        onChange={(e) => handleVariantChange(idx, 'stock', Number(e.target.value))}
-                        placeholder="Stock"
-                        className="w-full px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs outline-none"
-                      />
-                    </div>
-                    <div className="col-span-1 text-right">
+                    <div className="sm:col-span-1 flex items-center justify-end sm:justify-center">
                       <button
                         type="button"
                         onClick={() => handleRemoveVariant(idx)}
-                        className="p-1 hover:bg-rose-50 text-rose-600 rounded"
+                        className="p-1.5 hover:bg-rose-50 text-rose-600 rounded"
+                        aria-label="Remove variant"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -721,28 +728,30 @@ export const ProductEditor = () => {
 
             <div className="space-y-2">
               {formData.specs.map((row, idx) => (
-                <div key={idx} className="flex items-center gap-2">
+                <div key={idx} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-2.5 sm:p-0 bg-ivory/20 sm:bg-transparent rounded sm:rounded-none border sm:border-0 border-sand-border/60">
                   <input
                     type="text"
                     value={row.key}
                     onChange={(e) => handleSpecChange(idx, 'key', e.target.value)}
                     placeholder="Attribute (e.g. Closure)"
-                    className="w-1/3 px-3 py-1.5 text-xs border border-sand-border rounded-[2px] font-semibold text-espresso outline-none"
+                    className="w-full sm:w-1/3 px-3 py-1.5 text-xs border border-sand-border rounded-[2px] font-semibold text-espresso outline-none bg-white"
                   />
-                  <input
-                    type="text"
-                    value={row.value}
-                    onChange={(e) => handleSpecChange(idx, 'value', e.target.value)}
-                    placeholder="Value (e.g. Post back with push lock)"
-                    className="flex-1 px-3 py-1.5 text-xs border border-sand-border rounded-[2px] text-espresso outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveSpecRow(idx)}
-                    className="p-1.5 hover:bg-rose-50 text-rose-600 rounded transition-colors"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-2 flex-1">
+                    <input
+                      type="text"
+                      value={row.value}
+                      onChange={(e) => handleSpecChange(idx, 'value', e.target.value)}
+                      placeholder="Value (e.g. Post back with push lock)"
+                      className="flex-1 px-3 py-1.5 text-xs border border-sand-border rounded-[2px] text-espresso outline-none bg-white"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSpecRow(idx)}
+                      className="p-1.5 hover:bg-rose-50 text-rose-600 rounded transition-colors flex-shrink-0"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

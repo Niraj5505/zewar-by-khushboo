@@ -67,6 +67,59 @@
   }
 }
 
+/* Seasonal Festive Tokens (Diwali / Deepavali) */
+:root {
+  --festive-accent: #E8A33D;
+  --festive-deep:   #B33A2B;
+  --festive-glow:   rgba(198, 161, 91, 0.35);
+}
+
+body[data-festive="true"] .btn-gold {
+  box-shadow: 0 0 0 1px #C6A15B, 0 0 12px var(--festive-glow);
+}
+
+@keyframes festiveGlowPulse {
+  0% {
+    box-shadow: 0 0 0 1px #C6A15B, 0 0 14px rgba(198, 161, 91, 0.22);
+  }
+  100% {
+    box-shadow: 0 0 0 1px #C6A15B, 0 0 28px rgba(198, 161, 91, 0.42);
+  }
+}
+
+@keyframes garlandSway {
+  0% { transform: rotate(-0.4deg); }
+  50% { transform: rotate(0.4deg); }
+  100% { transform: rotate(-0.4deg); }
+}
+
+@keyframes floatDiyaRise {
+  0% {
+    transform: translateY(0) scale(0.92);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.42;
+  }
+  85% {
+    opacity: 0.42;
+  }
+  100% {
+    transform: translateY(-680px) scale(1.06);
+    opacity: 0;
+  }
+}
+
+@keyframes rangoliRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes goldShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 /* Accessibility: respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -75,4 +128,10 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  body[data-festive="true"] * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }
+

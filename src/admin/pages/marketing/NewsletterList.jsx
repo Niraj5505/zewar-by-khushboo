@@ -87,7 +87,7 @@ export const NewsletterList = () => {
         <button
           type="button"
           onClick={() => setCampaignModalOpen(true)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+          className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
         >
           <Send className="w-3.5 h-3.5" />
           <span>Send Campaign</span>
@@ -104,7 +104,7 @@ export const NewsletterList = () => {
       {/* Campaign Broadcast Modal */}
       {campaignModalOpen && (
         <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-6 space-y-4">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-4 sm:p-6 max-h-[90vh] overflow-y-auto space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-sand-border">
               <h3 className="font-serif text-lg font-medium text-espresso">
                 Broadcast VIP Newsletter Campaign
@@ -141,26 +141,26 @@ export const NewsletterList = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-sand-border">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-3 border-t border-sand-border">
                 <button
                   type="button"
                   onClick={handleTestSend}
-                  className="px-3 py-1.5 border border-sand-border hover:bg-sand/30 text-xs font-semibold rounded text-espresso"
+                  className="w-full sm:w-auto px-3 py-1.5 border border-sand-border hover:bg-sand/30 text-xs font-semibold rounded text-espresso text-center"
                 >
                   {testSent ? '✓ Test Sent to Owner' : 'Send Test Preview'}
                 </button>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={() => setCampaignModalOpen(false)}
-                    className="px-3 py-1.5 border border-sand-border text-xs rounded"
+                    className="flex-1 sm:flex-none px-3 py-1.5 border border-sand-border text-xs rounded"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-1.5 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs rounded shadow-sm"
+                    className="flex-1 sm:flex-none px-4 py-1.5 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs rounded shadow-sm text-center"
                   >
                     Dispatch Campaign
                   </button>

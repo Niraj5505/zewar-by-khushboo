@@ -137,7 +137,7 @@ export const ProductList = () => {
       key: 'actions',
       header: 'Actions',
       sortable: false,
-      className: 'text-right',
+      className: 'text-right whitespace-nowrap',
       render: (_, row) => (
         <div
           className="flex items-center justify-end gap-1.5"
@@ -215,11 +215,11 @@ export const ProductList = () => {
       </PageHeader>
 
       {/* Filter Component for DataTable */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none"
+          className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none flex-1 sm:flex-none min-w-[120px]"
         >
           <option value="all">All Categories</option>
           {categories.map((c) => (
@@ -232,7 +232,7 @@ export const ProductList = () => {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none"
+          className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none flex-1 sm:flex-none min-w-[110px]"
         >
           <option value="all">All Statuses</option>
           <option value="published">Published</option>
@@ -242,7 +242,7 @@ export const ProductList = () => {
         <select
           value={stockFilter}
           onChange={(e) => setStockFilter(e.target.value)}
-          className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none"
+          className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none flex-1 sm:flex-none min-w-[120px]"
         >
           <option value="all">All Stock Levels</option>
           <option value="in_stock">In Stock</option>

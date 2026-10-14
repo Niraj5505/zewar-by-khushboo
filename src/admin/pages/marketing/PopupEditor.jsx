@@ -79,8 +79,8 @@ export const PopupEditor = () => {
         {/* Right Column: Popup Configuration Form (8 cols) */}
         <div className="lg:col-span-8">
           {editingPopup ? (
-            <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-sand-border">
+            <form onSubmit={handleSave} className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-sand-border">
                 <div>
                   <h3 className="font-serif text-base font-medium text-espresso">
                     Edit: {editingPopup.name}

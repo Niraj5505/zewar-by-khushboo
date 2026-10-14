@@ -30,7 +30,7 @@ export const ConfirmDialog = ({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 animate-fade-in" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white border border-sand-border p-6 rounded-[4px] shadow-2xl z-50 focus:outline-none">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-md bg-white border border-sand-border p-4 sm:p-6 rounded-[4px] shadow-2xl z-50 focus:outline-none max-h-[90vh] overflow-y-auto">
           <div className="flex items-start gap-4">
             <div
               className={`p-2.5 rounded-full flex-shrink-0 ${

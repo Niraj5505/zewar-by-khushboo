@@ -97,7 +97,7 @@ export const Dashboard = () => {
         <button
           type="button"
           onClick={() => navigate('/admin/products/new')}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm flex-1 sm:flex-none"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>Add Product</span>
@@ -105,7 +105,7 @@ export const Dashboard = () => {
         <button
           type="button"
           onClick={() => navigate('/admin/coupons')}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-sand-border hover:bg-sand/30 text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-white border border-sand-border hover:bg-sand/30 text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm flex-1 sm:flex-none"
         >
           <Tag className="w-3.5 h-3.5 text-champagne-dark" />
           <span>Create Coupon</span>
@@ -113,7 +113,7 @@ export const Dashboard = () => {
         <button
           type="button"
           onClick={() => navigate('/admin/homepage')}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-sand-border hover:bg-sand/30 text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-white border border-sand-border hover:bg-sand/30 text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm flex-1 sm:flex-none"
         >
           <Layout className="w-3.5 h-3.5 text-champagne-dark" />
           <span>Edit Homepage</span>
@@ -262,37 +262,37 @@ export const Dashboard = () => {
               </Link>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto -mx-2 px-2 scrollbar-thin">
+              <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-sand-border text-espresso/60 font-semibold uppercase tracking-wider text-[10px]">
-                    <th className="pb-2.5">Order</th>
-                    <th className="pb-2.5">Customer</th>
-                    <th className="pb-2.5">Total</th>
-                    <th className="pb-2.5">Payment</th>
-                    <th className="pb-2.5">Fulfillment</th>
+                  <tr className="border-b border-sand-border text-espresso/60 font-semibold uppercase tracking-wider text-[10px] whitespace-nowrap">
+                    <th className="pb-2.5 pr-3">Order</th>
+                    <th className="pb-2.5 pr-3">Customer</th>
+                    <th className="pb-2.5 pr-3">Total</th>
+                    <th className="pb-2.5 pr-3">Payment</th>
+                    <th className="pb-2.5 pr-3">Fulfillment</th>
                     <th className="pb-2.5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-sand-border/40">
+                <tbody className="divide-y divide-sand-border/40 whitespace-nowrap">
                   {orders.slice(0, 5).map((o) => (
                     <tr
                       key={o.id}
                       onClick={() => navigate(`/admin/orders/${o.id}`)}
                       className="hover:bg-ivory/40 cursor-pointer transition-colors"
                     >
-                      <td className="py-3 font-semibold text-espresso">{o.id}</td>
-                      <td className="py-3 font-medium text-espresso">
+                      <td className="py-3 pr-3 font-semibold text-espresso">{o.id}</td>
+                      <td className="py-3 pr-3 font-medium text-espresso">
                         <div>{o.customer.name}</div>
                         <div className="text-[11px] text-espresso/50">{o.customer.email}</div>
                       </td>
-                      <td className="py-3 font-medium text-espresso">
+                      <td className="py-3 pr-3 font-medium text-espresso">
                         {formatINR(o.pricing?.grandTotalPaise)}
                       </td>
-                      <td className="py-3">
+                      <td className="py-3 pr-3">
                         <StatusBadge status={o.paymentStatus} />
                       </td>
-                      <td className="py-3">
+                      <td className="py-3 pr-3">
                         <StatusBadge status={o.fulfillmentStatus} />
                       </td>
                       <td className="py-3 text-right">

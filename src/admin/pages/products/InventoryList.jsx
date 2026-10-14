@@ -112,10 +112,10 @@ export const InventoryList = () => {
       </PageHeader>
 
       {/* Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-4 border border-sand-border/80 rounded-[4px] shadow-subtle">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white p-3 sm:p-4 border border-sand-border/80 rounded-[4px] shadow-subtle">
         <div className="flex items-center gap-2 max-w-sm w-full">
           <div className="relative w-full">
-            <Search className="w-4 h-4 text-espresso/40 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-espresso/40 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={search}
@@ -126,11 +126,11 @@ export const InventoryList = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs w-full md:w-auto">
           <button
             type="button"
             onClick={() => setFilter('all')}
-            className={`px-3 py-1.5 rounded-[2px] font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-[2px] font-medium transition-colors flex-1 sm:flex-none text-center ${
               filter === 'all'
                 ? 'bg-espresso text-ivory font-semibold'
                 : 'border border-sand-border hover:bg-sand/30 text-espresso'
@@ -141,7 +141,7 @@ export const InventoryList = () => {
           <button
             type="button"
             onClick={() => setFilter('low_stock')}
-            className={`px-3 py-1.5 rounded-[2px] font-medium transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-[2px] font-medium transition-colors flex items-center justify-center gap-1.5 flex-1 sm:flex-none ${
               filter === 'low_stock'
                 ? 'bg-amber-800 text-white font-semibold'
                 : 'border border-sand-border hover:bg-amber-50 text-amber-900'
@@ -157,7 +157,7 @@ export const InventoryList = () => {
           <button
             type="button"
             onClick={() => setFilter('out_of_stock')}
-            className={`px-3 py-1.5 rounded-[2px] font-medium transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-[2px] font-medium transition-colors flex items-center justify-center gap-1.5 flex-1 sm:flex-none ${
               filter === 'out_of_stock'
                 ? 'bg-rose-800 text-white font-semibold'
                 : 'border border-sand-border hover:bg-rose-50 text-rose-900'
@@ -175,9 +175,9 @@ export const InventoryList = () => {
 
       {/* Inventory Table */}
       <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-px scrollbar-thin">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold">
+            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold whitespace-nowrap">
               <tr>
                 <th className="px-4 py-3">Product & Variant</th>
                 <th className="px-4 py-3">SKU</th>
@@ -194,7 +194,7 @@ export const InventoryList = () => {
                 const isOut = row.stock <= 0;
 
                 return (
-                  <tr key={row.uniqueKey} className="hover:bg-ivory/30 transition-colors">
+                  <tr key={row.uniqueKey} className="hover:bg-ivory/30 transition-colors whitespace-nowrap">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-11 rounded-[2px] bg-sand/40 border border-sand-border overflow-hidden flex-shrink-0">
@@ -296,8 +296,8 @@ export const InventoryList = () => {
 
       {/* Bulk Restock Modal */}
       {bulkModalOpen && (
-        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-md p-6 space-y-4">
+        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-md p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="font-serif text-lg font-medium text-espresso">
               Batch Restock Low Items
             </h3>

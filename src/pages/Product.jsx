@@ -24,6 +24,8 @@ import { useUIStore } from '../store/uiStore';
 import { usePopupStore } from '../store/popupStore';
 import { toast } from '../store/toastStore';
 import { BRAND } from '../lib/brand';
+import { GiftWrapBadge } from '../components/festive/commerce/GiftWrapBadge';
+import { triggerFestiveConfetti } from '../components/festive/overlays/DiwaliConfettiBurst';
 
 export const Product = () => {
   const { slug } = useParams();
@@ -52,8 +54,9 @@ export const Product = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
     addItem(product, quantity);
+    triggerFestiveConfetti(e?.clientX, e?.clientY);
     toast.success(`Added ${quantity} × ${product.name} to bag`, {
       product,
       action: { label: 'View Bag', href: '/cart' },
@@ -245,6 +248,7 @@ export const Product = () => {
               <Ruler className="w-3.5 h-3.5 text-champagne-dark" />
               <span>Size Guide</span>
             </button>
+            <GiftWrapBadge />
           </div>
 
           {/* Quantity Selector & Action Buttons */}

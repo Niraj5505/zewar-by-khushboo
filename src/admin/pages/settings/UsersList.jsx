@@ -80,9 +80,9 @@ export const UsersList = () => {
 
       {/* Users Table */}
       <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-px scrollbar-thin">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold">
+            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold whitespace-nowrap">
               <tr>
                 <th className="px-4 py-3">Administrator</th>
                 <th className="px-4 py-3">Role Tier</th>
@@ -91,7 +91,7 @@ export const UsersList = () => {
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sand-border/40 font-sans">
+            <tbody className="divide-y divide-sand-border/40 font-sans whitespace-nowrap">
               {users.map((u) => {
                 const isSelf = u.id === currentAdmin?.id;
                 return (
@@ -164,7 +164,7 @@ export const UsersList = () => {
       </div>
 
       {/* Role Capabilities Matrix */}
-      <div className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-4">
+      <div className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-4">
         <h3 className="font-serif text-base font-medium text-espresso pb-2 border-b border-sand-border/70 flex items-center gap-2">
           <Shield className="w-4 h-4 text-champagne-dark" />
           <span>Role Capability Permissions Matrix</span>
@@ -173,9 +173,9 @@ export const UsersList = () => {
           Enforced server-side across all mutation endpoints and back-of-house UI views.
         </p>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-px scrollbar-thin">
           <table className="w-full text-left text-xs border border-sand-border/60">
-            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso font-semibold uppercase text-[10px]">
+            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso font-semibold uppercase text-[10px] whitespace-nowrap">
               <tr>
                 <th className="p-3">Feature Capability</th>
                 <th className="p-3 text-center">Super Admin</th>
@@ -183,7 +183,7 @@ export const UsersList = () => {
                 <th className="p-3 text-center">Staff</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sand-border/40 font-sans">
+            <tbody className="divide-y divide-sand-border/40 font-sans whitespace-nowrap">
               {permissionMatrix.map((item, idx) => (
                 <tr key={idx} className="hover:bg-ivory/20">
                   <td className="p-3 font-medium text-espresso">{item.capability}</td>
@@ -217,8 +217,8 @@ export const UsersList = () => {
 
       {/* Invite Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-md p-6 space-y-4">
+        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-md p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="font-serif text-lg font-medium text-espresso">
               Invite Team Member
             </h3>

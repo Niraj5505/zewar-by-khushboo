@@ -59,11 +59,11 @@ export const ReviewModeration = () => {
       </PageHeader>
 
       {/* Filter toolbar */}
-      <div className="flex flex-wrap items-center gap-3 p-4 bg-white border border-sand-border/80 rounded-[4px] shadow-subtle text-xs">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white border border-sand-border/80 rounded-[4px] shadow-subtle text-xs">
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-1.5 border border-sand-border rounded bg-white outline-none"
+          className="px-3 py-1.5 border border-sand-border rounded bg-white outline-none flex-1 sm:flex-none min-w-[140px]"
         >
           <option value="all">All Moderation Statuses</option>
           <option value="pending">Pending Approval</option>
@@ -74,7 +74,7 @@ export const ReviewModeration = () => {
         <select
           value={ratingFilter}
           onChange={(e) => setRatingFilter(e.target.value)}
-          className="px-3 py-1.5 border border-sand-border rounded bg-white outline-none"
+          className="px-3 py-1.5 border border-sand-border rounded bg-white outline-none flex-1 sm:flex-none min-w-[140px]"
         >
           <option value="all">All Star Ratings</option>
           <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
@@ -87,9 +87,9 @@ export const ReviewModeration = () => {
 
       {/* Table */}
       <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-px scrollbar-thin">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold">
+            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold whitespace-nowrap">
               <tr>
                 <th className="px-4 py-3">Product</th>
                 <th className="px-4 py-3">Patron & Rating</th>
@@ -99,7 +99,7 @@ export const ReviewModeration = () => {
                 <th className="px-4 py-3 text-right">Moderation</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sand-border/40 font-sans">
+            <tbody className="divide-y divide-sand-border/40 font-sans whitespace-nowrap">
               {filteredReviews.map((r) => (
                 <tr key={r.id} className="hover:bg-ivory/30 transition-colors">
                   <td className="px-4 py-3">
@@ -174,8 +174,8 @@ export const ReviewModeration = () => {
 
       {/* Detail & Reply Modal */}
       {selectedReview && (
-        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-6 space-y-4">
+        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-sand-border">
               <h3 className="font-serif text-lg font-medium text-espresso">
                 Review for {selectedReview.productName}

@@ -28,9 +28,9 @@ export const ReturnsList = () => {
       />
 
       <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-px scrollbar-thin">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold">
+            <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold whitespace-nowrap">
               <tr>
                 <th className="px-4 py-3">Return ID</th>
                 <th className="px-4 py-3">Order #</th>
@@ -42,7 +42,7 @@ export const ReturnsList = () => {
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sand-border/40 font-sans">
+            <tbody className="divide-y divide-sand-border/40 font-sans whitespace-nowrap">
               {returns.map((ret) => (
                 <tr key={ret.id} className="hover:bg-ivory/30 transition-colors">
                   <td className="px-4 py-3 font-semibold font-mono text-espresso">{ret.id}</td>
@@ -80,8 +80,8 @@ export const ReturnsList = () => {
 
       {/* Return Detail / Action Modal */}
       {selectedReturn && (
-        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-6 space-y-4">
+        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-lg p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-sand-border">
               <h3 className="font-serif text-lg font-medium text-espresso">
                 Return Request: {selectedReturn.id}

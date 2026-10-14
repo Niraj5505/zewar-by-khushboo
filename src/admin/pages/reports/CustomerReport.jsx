@@ -84,8 +84,8 @@ export const CustomerReport = () => {
           </h3>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto scrollbar-thin">
+          <table className="w-full text-left text-xs whitespace-nowrap">
             <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase text-[11px] font-semibold">
               <tr>
                 <th className="px-4 py-3">Patron Name</th>

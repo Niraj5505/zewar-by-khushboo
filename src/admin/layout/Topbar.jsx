@@ -13,6 +13,7 @@ import {
   Package,
   X,
   ChevronDown,
+  Menu,
 } from 'lucide-react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { useAuth } from '../hooks/useAuth';
@@ -22,9 +23,13 @@ export const Topbar = () => {
   const { user, role, logout, switchRole } = useAuth();
   const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const toggleMobileSidebar = useCmsStore((s) => s.toggleMobileSidebar);
+  const isMobileSidebarOpen = useCmsStore((s) => s.isMobileSidebarOpen);
 
   const notifRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -86,14 +91,119 @@ export const Topbar = () => {
     navigate('/admin/login');
   };
 
+  const renderSearchResults = (onSelect) => {
+    if (!searchResults) return null;
+    const hasAny =
+      searchResults.products.length > 0 ||
+      searchResults.orders.length > 0 ||
+      searchResults.customers.length > 0;
+
+    if (!hasAny) {
+      return (
+        <p className="text-xs text-espresso/50 text-center py-2">
+          No matching records found.
+        </p>
+      );
+    }
+
+    return (
+      <div className="space-y-3 font-sans">
+        {searchResults.products.length > 0 && (
+          <div>
+            <p className="text-[10px] uppercase font-bold tracking-wider text-espresso/50 mb-1">
+              Products
+            </p>
+            <div className="space-y-1">
+              {searchResults.products.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    navigate(`/admin/products/${p.id}/edit`);
+                    onSelect();
+                  }}
+                  className="w-full text-left p-1.5 hover:bg-sand/30 rounded flex items-center gap-2 text-xs text-espresso"
+                >
+                  <Package className="w-3.5 h-3.5 text-champagne-dark" />
+                  <span className="font-medium truncate">{p.name}</span>
+                  <span className="text-[11px] text-espresso/40 ml-auto">{p.sku}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {searchResults.orders.length > 0 && (
+          <div>
+            <p className="text-[10px] uppercase font-bold tracking-wider text-espresso/50 mb-1">
+              Orders
+            </p>
+            <div className="space-y-1">
+              {searchResults.orders.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  onClick={() => {
+                    navigate(`/admin/orders/${o.id}`);
+                    onSelect();
+                  }}
+                  className="w-full text-left p-1.5 hover:bg-sand/30 rounded flex items-center gap-2 text-xs text-espresso"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5 text-champagne-dark" />
+                  <span className="font-medium">{o.id}</span>
+                  <span className="text-espresso/60 truncate">— {o.customer.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {searchResults.customers.length > 0 && (
+          <div>
+            <p className="text-[10px] uppercase font-bold tracking-wider text-espresso/50 mb-1">
+              Customers
+            </p>
+            <div className="space-y-1">
+              {searchResults.customers.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => {
+                    navigate(`/admin/customers/${c.id}`);
+                    onSelect();
+                  }}
+                  className="w-full text-left p-1.5 hover:bg-sand/30 rounded flex items-center gap-2 text-xs text-espresso"
+                >
+                  <User className="w-3.5 h-3.5 text-champagne-dark" />
+                  <span className="font-medium truncate">{c.name}</span>
+                  <span className="text-espresso/40 text-[11px] ml-auto">{c.email}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/95 backdrop-blur border-b border-sand-border/80 px-4 sm:px-8 flex items-center justify-between gap-4">
-      {/* Left: Breadcrumbs */}
-      <div className="flex-1 min-w-0">
-        <Breadcrumbs />
+    <header className="sticky top-0 z-30 h-14 sm:h-16 bg-white/95 backdrop-blur border-b border-sand-border/80 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 relative">
+      {/* Left: Mobile Menu Button & Breadcrumbs */}
+      <div className="flex items-center gap-2 flex-1 min-w-0">
+        <button
+          type="button"
+          onClick={toggleMobileSidebar}
+          className="p-1.5 -ml-1 text-espresso/70 hover:text-espresso hover:bg-sand/40 rounded-[2px] transition-colors lg:hidden flex-shrink-0"
+          aria-label={isMobileSidebarOpen ? 'Close navigation drawer' : 'Open navigation drawer'}
+        >
+          <Menu className="w-5 h-5 text-espresso" />
+        </button>
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <Breadcrumbs />
+        </div>
       </div>
 
-      {/* Center: Global Search Input */}
+      {/* Center: Global Search Input (Desktop) */}
       <div className="relative max-w-md w-full hidden md:block">
         <div className="relative">
           <Search className="w-4 h-4 text-espresso/40 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -122,100 +232,31 @@ export const Topbar = () => {
           )}
         </div>
 
-        {/* Live Search Results Dropdown */}
-        {searchOpen && searchQuery.trim() && searchResults && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-sand-border rounded-[4px] shadow-2xl p-3 z-50 max-h-96 overflow-y-auto space-y-3 font-sans">
-            {searchResults.products.length > 0 && (
-              <div>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-espresso/50 mb-1">
-                  Products
-                </p>
-                <div className="space-y-1">
-                  {searchResults.products.map((p) => (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => {
-                        navigate(`/admin/products/${p.id}/edit`);
-                        setSearchOpen(false);
-                        setSearchQuery('');
-                      }}
-                      className="w-full text-left p-1.5 hover:bg-sand/30 rounded flex items-center gap-2 text-xs text-espresso"
-                    >
-                      <Package className="w-3.5 h-3.5 text-champagne-dark" />
-                      <span className="font-medium truncate">{p.name}</span>
-                      <span className="text-[11px] text-espresso/40 ml-auto">{p.sku}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {searchResults.orders.length > 0 && (
-              <div>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-espresso/50 mb-1">
-                  Orders
-                </p>
-                <div className="space-y-1">
-                  {searchResults.orders.map((o) => (
-                    <button
-                      key={o.id}
-                      type="button"
-                      onClick={() => {
-                        navigate(`/admin/orders/${o.id}`);
-                        setSearchOpen(false);
-                        setSearchQuery('');
-                      }}
-                      className="w-full text-left p-1.5 hover:bg-sand/30 rounded flex items-center gap-2 text-xs text-espresso"
-                    >
-                      <ShoppingBag className="w-3.5 h-3.5 text-champagne-dark" />
-                      <span className="font-medium">{o.id}</span>
-                      <span className="text-espresso/60 truncate">— {o.customer.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {searchResults.customers.length > 0 && (
-              <div>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-espresso/50 mb-1">
-                  Customers
-                </p>
-                <div className="space-y-1">
-                  {searchResults.customers.map((c) => (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => {
-                        navigate(`/admin/customers/${c.id}`);
-                        setSearchOpen(false);
-                        setSearchQuery('');
-                      }}
-                      className="w-full text-left p-1.5 hover:bg-sand/30 rounded flex items-center gap-2 text-xs text-espresso"
-                    >
-                      <User className="w-3.5 h-3.5 text-champagne-dark" />
-                      <span className="font-medium truncate">{c.name}</span>
-                      <span className="text-espresso/40 text-[11px] ml-auto">{c.email}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {!searchResults.products.length &&
-              !searchResults.orders.length &&
-              !searchResults.customers.length && (
-                <p className="text-xs text-espresso/50 text-center py-2">
-                  No matching records found.
-                </p>
-              )}
+        {/* Live Search Results Dropdown (Desktop) */}
+        {searchOpen && searchQuery.trim() && (
+          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-sand-border rounded-[4px] shadow-2xl p-3 z-50 max-h-96 overflow-y-auto">
+            {renderSearchResults(() => {
+              setSearchOpen(false);
+              setSearchQuery('');
+            })}
           </div>
         )}
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+        {/* Mobile Search Toggle */}
+        <button
+          type="button"
+          onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+          className={`p-2 text-espresso/70 hover:text-espresso hover:bg-sand/30 rounded-[2px] md:hidden transition-colors ${
+            mobileSearchOpen ? 'bg-sand/40 text-espresso' : ''
+          }`}
+          aria-label="Toggle search"
+        >
+          <Search className="w-4 h-4" />
+        </button>
+
         {/* Storefront Link */}
         <a
           href="/"
@@ -245,7 +286,7 @@ export const Topbar = () => {
 
           {/* Notifications Dropdown */}
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white border border-sand-border rounded-[4px] shadow-2xl p-4 z-50 text-xs font-sans space-y-3">
+            <div className="absolute right-0 mt-2 w-[calc(100vw-1.5rem)] sm:w-80 max-w-sm bg-white border border-sand-border rounded-[4px] shadow-2xl p-4 z-50 text-xs font-sans space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-sand-border/70">
                 <span className="font-serif font-medium text-sm text-espresso">
                   Notifications
@@ -349,7 +390,7 @@ export const Topbar = () => {
 
           {/* User Menu Dropdown */}
           {showUserMenu && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border border-sand-border rounded-[4px] shadow-2xl p-2 z-50 text-xs font-sans space-y-1">
+            <div className="absolute right-0 mt-2 w-60 max-w-[calc(100vw-1.5rem)] bg-white border border-sand-border rounded-[4px] shadow-2xl p-2 z-50 text-xs font-sans space-y-1">
               <div className="px-3 py-2 border-b border-sand-border/70">
                 <p className="font-semibold text-espresso">{user?.name}</p>
                 <p className="text-[11px] text-espresso/50 truncate">{user?.email}</p>
@@ -411,6 +452,41 @@ export const Topbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Search Expandable Bar */}
+      {mobileSearchOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-sand-border shadow-xl p-3 z-50 animate-fade-in">
+          <div className="relative">
+            <Search className="w-4 h-4 text-espresso/40 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              autoFocus
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products, orders, customers..."
+              className="w-full pl-9 pr-8 py-2 text-xs bg-ivory/60 border border-sand-border rounded-[2px] text-espresso placeholder:text-espresso/40 focus:outline-none focus:ring-2 focus:ring-champagne focus:bg-white"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-espresso/40 hover:text-espresso p-1"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {searchQuery.trim() && (
+            <div className="mt-2 bg-white border border-sand-border rounded-[4px] p-2 max-h-72 overflow-y-auto">
+              {renderSearchResults(() => {
+                setMobileSearchOpen(false);
+                setSearchQuery('');
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </header>
   );
 };

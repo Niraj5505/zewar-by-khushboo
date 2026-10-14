@@ -86,7 +86,7 @@ export const OrderList = () => {
       key: 'actions',
       header: 'Actions',
       sortable: false,
-      className: 'text-right',
+      className: 'text-right whitespace-nowrap',
       render: (_, row) => (
         <button
           type="button"
@@ -104,11 +104,11 @@ export const OrderList = () => {
   ];
 
   const filterComponent = (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
       <select
         value={paymentFilter}
         onChange={(e) => setPaymentFilter(e.target.value)}
-        className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none"
+        className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none flex-1 sm:flex-none min-w-[120px]"
       >
         <option value="all">All Payments</option>
         <option value="paid">Paid</option>
@@ -120,7 +120,7 @@ export const OrderList = () => {
       <select
         value={fulfillmentFilter}
         onChange={(e) => setFulfillmentFilter(e.target.value)}
-        className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none"
+        className="px-2.5 py-1.5 bg-white border border-sand-border rounded-[2px] text-xs text-espresso focus:ring-1 focus:ring-champagne outline-none flex-1 sm:flex-none min-w-[120px]"
       >
         <option value="all">All Fulfillments</option>
         <option value="unfulfilled">Unfulfilled</option>

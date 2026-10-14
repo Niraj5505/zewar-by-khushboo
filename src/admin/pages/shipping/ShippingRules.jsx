@@ -121,8 +121,8 @@ export const ShippingRules = () => {
       </PageHeader>
 
       <div className="bg-white border border-sand-border/80 rounded-[4px] shadow-subtle overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto scrollbar-thin">
+          <table className="w-full text-left text-xs whitespace-nowrap">
             <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase tracking-wider text-[11px] font-semibold">
               <tr>
                 <th className="px-4 py-3 w-16">Priority</th>
@@ -210,7 +210,7 @@ export const ShippingRules = () => {
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-md p-6 space-y-4">
+          <div className="bg-white border border-sand-border rounded-[4px] shadow-2xl w-full max-w-md p-4 sm:p-6 max-h-[90vh] overflow-y-auto space-y-4">
             <h3 className="font-serif text-lg font-medium text-espresso">
               {editingRule ? 'Edit Shipping Rule' : 'New Shipping Rule'}
             </h3>

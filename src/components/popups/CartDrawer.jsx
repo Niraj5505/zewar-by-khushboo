@@ -6,6 +6,7 @@ import { useCartStore } from '../../store/cartStore';
 import { formatPaise } from '../../lib/formatINR';
 import { BRAND } from '../../lib/brand';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { GiftWrapBadge } from '../festive/commerce/GiftWrapBadge';
 
 export const CartDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -67,6 +68,11 @@ export const CartDrawer = ({ isOpen, onClose }) => {
               <span>You've unlocked <strong>Free Pan-India Delivery!</strong> 🎉</span>
             </p>
           )}
+        </div>
+
+        {/* Complimentary Festive Gift Wrapping Indicator */}
+        <div className="flex justify-start">
+          <GiftWrapBadge />
         </div>
 
         {/* Line Items List */}

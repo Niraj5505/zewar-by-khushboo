@@ -66,7 +66,7 @@ export const HomepageEditor = () => {
         title="Homepage Layout & Sections"
         description="Arrange visual sections, customize hero copy, curating bestsellers, and manage layout sequence."
       >
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
           <div className="flex bg-white border border-sand-border rounded-[2px] p-0.5 text-xs mr-2">
             <button
               type="button"
@@ -96,7 +96,7 @@ export const HomepageEditor = () => {
           <button
             type="button"
             onClick={handlePublishAll}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
+            className="w-full sm:w-auto justify-center inline-flex items-center gap-2 px-4 py-2 bg-champagne hover:bg-champagne-hover text-espresso font-semibold text-xs uppercase tracking-wider rounded-[2px] transition-colors shadow-sm"
           >
             {saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
             <span>{saved ? 'Published Live!' : 'Publish Sections'}</span>
@@ -112,7 +112,7 @@ export const HomepageEditor = () => {
               {sections.map((section, idx) => (
                 <div
                   key={section.id}
-                  className={`p-4 flex items-center justify-between gap-3 transition-colors ${
+                  className={`p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
                     !section.enabled ? 'bg-sand/15 opacity-70' : 'bg-white hover:bg-ivory/30'
                   }`}
                 >
@@ -151,7 +151,7 @@ export const HomepageEditor = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
                     <button
                       type="button"
                       onClick={() => setEditingSection(section)}
@@ -181,7 +181,7 @@ export const HomepageEditor = () => {
           {/* Right Column: Inline Section Config Form (5 cols) */}
           <div className="lg:col-span-5">
             {editingSection ? (
-              <div className="bg-white border border-sand-border/80 rounded-[4px] p-6 shadow-subtle space-y-4">
+              <div className="bg-white border border-sand-border/80 rounded-[4px] p-4 sm:p-6 shadow-subtle space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-sand-border">
                   <h3 className="font-serif text-base font-medium text-espresso">
                     Configure: {editingSection.title}

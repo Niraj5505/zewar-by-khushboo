@@ -95,13 +95,13 @@ export const OrderDetail = () => {
         <div className="flex items-center gap-3">
           <Link
             to="/admin/orders"
-            className="p-2 border border-sand-border hover:bg-sand/30 rounded-[2px] text-espresso/70 hover:text-espresso transition-colors"
+            className="p-2 border border-sand-border hover:bg-sand/30 rounded-[2px] text-espresso/70 hover:text-espresso transition-colors flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-serif text-2xl font-medium text-espresso font-mono">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="font-serif text-xl sm:text-2xl font-medium text-espresso font-mono truncate">
                 {order.id}
               </h1>
               <StatusBadge status={order.paymentStatus} />
@@ -116,11 +116,11 @@ export const OrderDetail = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={handlePrintInvoice}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold rounded-[2px] transition-colors"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold rounded-[2px] transition-colors"
           >
             <Printer className="w-3.5 h-3.5 text-champagne-dark" />
             <span>Print Invoice</span>
@@ -128,7 +128,7 @@ export const OrderDetail = () => {
           <button
             type="button"
             onClick={handlePrintInvoice}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold rounded-[2px] transition-colors"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 border border-sand-border hover:bg-sand/30 text-espresso text-xs font-semibold rounded-[2px] transition-colors"
           >
             <FileText className="w-3.5 h-3.5 text-champagne-dark" />
             <span>Packing Slip</span>
@@ -438,8 +438,8 @@ export const OrderDetail = () => {
 
       {/* Cancel Order Modal */}
       {cancelModalOpen && (
-        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] p-6 max-w-md w-full space-y-4">
+        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-sand-border rounded-[4px] p-4 sm:p-6 max-w-md w-full space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="font-serif text-lg font-medium text-espresso">
               Cancel Order {order.id}?
             </h3>
@@ -479,8 +479,8 @@ export const OrderDetail = () => {
 
       {/* Refund Modal */}
       {refundModalOpen && (
-        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-sand-border rounded-[4px] p-6 max-w-md w-full space-y-4">
+        <div className="fixed inset-0 bg-espresso/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-sand-border rounded-[4px] p-4 sm:p-6 max-w-md w-full space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="font-serif text-lg font-medium text-espresso">
               Issue Refund for {order.id}
             </h3>

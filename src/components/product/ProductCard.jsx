@@ -7,6 +7,8 @@ import { useWishlistStore } from '../../store/wishlistStore';
 import { usePopupStore } from '../../store/popupStore';
 import { toast } from '../../store/toastStore';
 import { cn } from '../../lib/cn';
+import { FestiveBadge } from '../festive/FestiveBadge';
+import { triggerFestiveConfetti } from '../festive/overlays/DiwaliConfettiBurst';
 
 export const ProductCard = ({ product, priority = false }) => {
   const { addItem } = useCartStore();
@@ -20,6 +22,7 @@ export const ProductCard = ({ product, priority = false }) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(product, 1);
+    triggerFestiveConfetti(e.clientX, e.clientY);
     toast.success(`Added ${product.name} to bag`, {
       product,
       action: { label: 'View Bag', href: '/cart' },
@@ -60,6 +63,7 @@ export const ProductCard = ({ product, priority = false }) => {
 
         {/* Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10 pointer-events-none">
+          <FestiveBadge product={product} />
           {product.isBestSeller && (
             <span className="bg-espresso text-ivory text-[9px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-[2px] shadow-sm">
               Bestseller

@@ -100,17 +100,17 @@ export const useCartStore = create(
 
       applyCoupon: (code) => {
         const cleanCode = code?.trim().toUpperCase();
-        if (cleanCode === 'ZEWAR10') {
-          set({ appliedCoupon: 'ZEWAR10', couponDiscountPercent: 10 });
-          return { success: true, message: '10% discount applied!' };
-        } else if (cleanCode === 'ROYAL15') {
-          set({ appliedCoupon: 'ROYAL15', couponDiscountPercent: 15 });
-          return { success: true, message: '15% Royal discount applied!' };
+        if (cleanCode === 'ZEWAR10' || cleanCode === 'DIWALI10') {
+          set({ appliedCoupon: cleanCode, couponDiscountPercent: 10 });
+          return { success: true, message: '10% festive discount applied!' };
+        } else if (cleanCode === 'ROYAL15' || cleanCode === 'DIWALI15') {
+          set({ appliedCoupon: cleanCode, couponDiscountPercent: 15 });
+          return { success: true, message: '15% Royal festive discount applied!' };
         } else if (cleanCode === 'FIRST500') {
           set({ appliedCoupon: 'FIRST500', couponDiscountPercent: 12 });
           return { success: true, message: 'First order discount applied!' };
         }
-        return { success: false, message: 'Invalid coupon code. Try ZEWAR10' };
+        return { success: false, message: 'Invalid coupon code. Try DIWALI10 or ZEWAR10' };
       },
 
       removeCoupon: () => set({ appliedCoupon: null, couponDiscountPercent: 0 }),

@@ -12,6 +12,14 @@ import { SearchOverlay } from './components/layout/SearchOverlay';
 import { PopupRoot } from './components/popups/PopupRoot';
 import { Toaster } from './components/ui/Toaster';
 
+// Seasonal Festive Dressing (Diwali / Deepavali)
+import { FestiveProvider } from './components/festive/FestiveProvider';
+import { DiwaliBanner } from './components/festive/DiwaliBanner';
+import { DiyaGarland } from './components/festive/ambient/DiyaGarland';
+import { DiwaliPopup } from './components/festive/DiwaliPopup';
+import { DiwaliExitIntent } from './components/festive/overlays/DiwaliExitIntent';
+import { FestiveControls } from './components/festive/FestiveControls';
+
 // Storefront Pages (Standard Load)
 import { Home } from './pages/Home';
 import { Shop } from './pages/Shop';
@@ -56,6 +64,7 @@ const AnnouncementBarAdmin = lazy(() => import('./admin/pages/marketing/Announce
 const HomepageEditor = lazy(() => import('./admin/pages/marketing/HomepageEditor').then((m) => ({ default: m.HomepageEditor })));
 const PopupEditor = lazy(() => import('./admin/pages/marketing/PopupEditor').then((m) => ({ default: m.PopupEditor })));
 const NewsletterList = lazy(() => import('./admin/pages/marketing/NewsletterList').then((m) => ({ default: m.NewsletterList })));
+const FestiveMode = lazy(() => import('./admin/pages/marketing/FestiveMode').then((m) => ({ default: m.FestiveMode })));
 
 // Content & Shipping
 const PagesList = lazy(() => import('./admin/pages/content/PagesList').then((m) => ({ default: m.PagesList })));
@@ -98,8 +107,12 @@ const AdminLoading = () => (
 // Dedicated Storefront Layout Shell
 function StorefrontLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-ivory text-espresso font-sans">
-      <AnnouncementBar />
+    <div className="min-h-screen flex flex-col bg-ivory text-espresso font-sans relative">
+      <div className="relative z-40">
+        <DiwaliBanner />
+        <AnnouncementBar />
+        <DiyaGarland />
+      </div>
       <Header />
       <main className="flex-1">
         <Outlet />
@@ -107,6 +120,9 @@ function StorefrontLayout() {
       <MobileMenu />
       <SearchOverlay />
       <PopupRoot />
+      <DiwaliPopup />
+      <DiwaliExitIntent />
+      <FestiveControls />
       <Toaster />
       <Footer />
     </div>
@@ -116,7 +132,8 @@ function StorefrontLayout() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
+      <FestiveProvider>
+        <Routes>
         {/* PUBLIC STOREFRONT ROUTE TREE */}
         <Route element={<StorefrontLayout />}>
           <Route path="/" element={<Home />} />
@@ -268,6 +285,16 @@ function App() {
           />
 
           {/* Marketing */}
+          <Route
+            path="festive"
+            element={
+              <RequireAdmin roles={['SUPER_ADMIN', 'ADMIN']}>
+                <Suspense fallback={<AdminLoading />}>
+                  <FestiveMode />
+                </Suspense>
+              </RequireAdmin>
+            }
+          />
           <Route
             path="coupons"
             element={
@@ -478,6 +505,7 @@ function App() {
           />
         </Route>
       </Routes>
+      </FestiveProvider>
     </QueryClientProvider>
   );
 }

@@ -26,8 +26,8 @@ export const ProductReport = () => {
           <span className="text-xs text-espresso/50">Sorted by catalog presence</span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto scrollbar-thin">
+          <table className="w-full text-left text-xs whitespace-nowrap">
             <thead className="bg-[#FAF7F0] border-b border-sand-border text-espresso/70 uppercase text-[11px] font-semibold">
               <tr>
                 <th className="px-4 py-3">Product Name</th>
