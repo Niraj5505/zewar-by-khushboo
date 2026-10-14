@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useFestiveMode } from '../../../hooks/useFestiveMode';
+import { DiyaIcon } from '../DiyaIcon';
 
 export const FloatingDiyas = () => {
   const { canShowAmbient, canShowAnimations, deviceTier } = useFestiveMode();
@@ -65,11 +66,7 @@ export const FloatingDiyas = () => {
             animationDelay: `${d.delay}s`,
           }}
         >
-          <img
-            src="/src/assets/festive/diya.svg"
-            alt=""
-            className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(242,184,75,0.4)]"
-          />
+          <DiyaIcon className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(242,184,75,0.4)]" />
         </div>
       ))}
     </div>

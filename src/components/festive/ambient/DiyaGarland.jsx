@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useFestiveMode } from '../../../hooks/useFestiveMode';
+import garlandUrl from '../../../assets/festive/marigold-garland.svg';
 
 export const DiyaGarland = () => {
   const location = useLocation();
@@ -18,7 +19,7 @@ export const DiyaGarland = () => {
       <div
         className="w-full h-full flex items-center justify-between"
         style={{
-          backgroundImage: 'url("/src/assets/festive/marigold-garland.svg")',
+          backgroundImage: `url("${garlandUrl}")`,
           backgroundRepeat: 'repeat-x',
           backgroundPosition: 'center top',
           backgroundSize: '240px 28px',
