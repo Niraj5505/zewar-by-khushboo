@@ -13,6 +13,7 @@ import {
   Sparkles,
   Gift,
   Heart,
+  Check,
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { toast } from '../store/toastStore';
@@ -22,12 +23,10 @@ export const Auth = ({ initialMode = 'login' }) => {
   const location = useLocation();
   const { user, login, register } = useAuthStore();
 
-  // Mode: 'login' | 'register'
   const [mode, setMode] = useState(
     location.pathname === '/register' || initialMode === 'register' ? 'register' : 'login'
   );
 
-  // Sync mode with route changes
   useEffect(() => {
     if (location.pathname === '/register') {
       setMode('register');
@@ -36,7 +35,6 @@ export const Auth = ({ initialMode = 'login' }) => {
     }
   }, [location.pathname]);
 
-  // If already logged in, redirect to /account
   useEffect(() => {
     if (user?.isLoggedIn) {
       navigate('/account', { replace: true });
@@ -56,7 +54,25 @@ export const Auth = ({ initialMode = 'login' }) => {
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [showRegPassword, setShowRegPassword] = useState(false);
+  const [showRegConfirmPassword, setShowRegConfirmPassword] = useState(false);
   const [newsletterOptIn, setNewsletterOptIn] = useState(true);
+
+  // Password strength calculation
+  const getPasswordStrength = (pass) => {
+    if (!pass) return { score: 0, label: '', color: 'bg-sand' };
+    let score = 0;
+    if (pass.length >= 6) score += 1;
+    if (pass.length >= 10) score += 1;
+    if (/[0-9]/.test(pass)) score += 1;
+    if (/[A-Z]/.test(pass) && /[a-z]/.test(pass)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pass)) score += 1;
+
+    if (score <= 2) return { score: 1, label: 'Weak', color: 'bg-rose-400' };
+    if (score <= 3) return { score: 2, label: 'Moderate', color: 'bg-amber-400' };
+    return { score: 3, label: 'Strong', color: 'bg-emerald-500' };
+  };
+
+  const passwordStrength = getPasswordStrength(regPassword);
 
   // Forgot password dialog
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -80,9 +96,9 @@ export const Auth = ({ initialMode = 'login' }) => {
         toast.success(`Welcome back, ${res.user.name}!`);
         navigate('/account');
       } else {
-        toast.error('Unable to sign in. Please check your credentials.');
+        toast.error('Unable to sign in. Please verify your credentials.');
       }
-    }, 400);
+    }, 350);
   };
 
   const handleRegisterSubmit = (e) => {
@@ -97,7 +113,7 @@ export const Auth = ({ initialMode = 'login' }) => {
       return;
     }
     if (regPassword.length < 6) {
-      toast.error('Password must be at least 6 characters long.');
+      toast.error('Password must be at least 6 characters.');
       return;
     }
     if (regPassword !== regConfirmPassword) {
@@ -116,12 +132,22 @@ export const Auth = ({ initialMode = 'login' }) => {
       setLoading(false);
 
       if (res.success) {
-        toast.success(`Welcome to Zewar, ${res.user.name}! Your account has been created.`);
+        toast.success(`Welcome to Zewar, ${res.user.name}! Your account is ready.`);
         navigate('/account');
       } else {
         toast.error(res.message || 'Registration failed.');
       }
-    }, 400);
+    }, 350);
+  };
+
+  const handleGoogleSocialLogin = () => {
+    setLoading(true);
+    setTimeout(() => {
+      login('khushboo.patron@gmail.com', 'GoogleAuth2026');
+      setLoading(false);
+      toast.success('Signed in seamlessly with Google.');
+      navigate('/account');
+    }, 450);
   };
 
   const handleDemoLogin = () => {
@@ -138,52 +164,62 @@ export const Auth = ({ initialMode = 'login' }) => {
   };
 
   return (
-    <div className="min-h-[80vh] py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-ivory flex items-center justify-center">
-      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 bg-brandWhite border border-sand-border shadow-xl rounded-[4px] overflow-hidden">
+    <div className="min-h-[85vh] py-10 sm:py-16 px-4 sm:px-6 lg:px-8 bg-ivory flex items-center justify-center animate-fade-in">
+      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 bg-brandWhite border border-sand-border shadow-2xl rounded-[6px] overflow-hidden">
         
         {/* Left Side: Luxury Brand Imagery & Benefits (5 cols) */}
-        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-b from-[#2B1E19] via-[#35231C] to-[#1E1410] text-[#FAF7F0] p-8 flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-b from-[#2B1E19] via-[#35231C] to-[#1E1410] text-[#FAF7F0] p-9 flex-col justify-between relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A15B_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
-          <div className="space-y-4 relative z-10">
-            <span className="eyebrow text-champagne">Privileged Patron Access</span>
-            <h2 className="font-serif text-2xl font-light tracking-wide text-ivory">
+          <div className="space-y-3 relative z-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-champagne/15 border border-champagne/30 rounded-full text-champagne text-[10px] tracking-wider uppercase font-semibold">
+              <Sparkles className="w-3 h-3" />
+              <span>Privileged Patron Access</span>
+            </div>
+            <h2 className="font-serif text-3xl font-light tracking-wide text-ivory">
               Zewar by Khushboo
             </h2>
             <p className="text-xs text-ivory/70 leading-relaxed font-sans">
-              Enter your private sanctuary of handcrafted heritage jewellery, private salon consultations, and heirloom order tracking.
+              Enter your private sanctuary of handcrafted heritage jewellery, private salon orders, and bespoke tracking.
             </p>
           </div>
 
           <div className="space-y-4 py-8 relative z-10 border-y border-white/10 my-6">
             <div className="flex items-start gap-3">
-              <Gift className="w-4 h-4 text-champagne shrink-0 mt-0.5" />
+              <div className="w-7 h-7 rounded-full bg-champagne/15 flex items-center justify-center shrink-0">
+                <Gift className="w-3.5 h-3.5 text-champagne" />
+              </div>
               <div>
-                <span className="text-xs font-semibold text-ivory block">Complimentary Velvet Packaging</span>
+                <span className="text-xs font-semibold text-ivory block">Complimentary Velvet Unboxing</span>
                 <span className="text-[11px] text-ivory/60 block">Every heirloom arrives encased in royal presentation chests.</span>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
-              <Heart className="w-4 h-4 text-champagne shrink-0 mt-0.5" />
+              <div className="w-7 h-7 rounded-full bg-champagne/15 flex items-center justify-center shrink-0">
+                <Heart className="w-3.5 h-3.5 text-champagne" />
+              </div>
               <div>
-                <span className="text-xs font-semibold text-ivory block">Multi-Device Wishlist</span>
-                <span className="text-[11px] text-ivory/60 block">Save coveted earrings, chokers, and rings across your phone and tablet.</span>
+                <span className="text-xs font-semibold text-ivory block">Synchronized Wishlist</span>
+                <span className="text-[11px] text-ivory/60 block">Keep cherished necklaces, earrings, and rings on all devices.</span>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
-              <ShieldCheck className="w-4 h-4 text-champagne shrink-0 mt-0.5" />
+              <div className="w-7 h-7 rounded-full bg-champagne/15 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-3.5 h-3.5 text-champagne" />
+              </div>
               <div>
-                <span className="text-xs font-semibold text-ivory block">Real-Time Dispatch Tracking</span>
-                <span className="text-[11px] text-ivory/60 block">Stay informed on insured doorstep delivery milestones.</span>
+                <span className="text-xs font-semibold text-ivory block">Insured Doorstep Transit</span>
+                <span className="text-[11px] text-ivory/60 block">Fully insured courier dispatch with live delivery tracking.</span>
               </div>
             </div>
           </div>
 
-          <div className="text-[11px] text-ivory/50 flex items-center gap-1.5 relative z-10">
-            <Sparkles className="w-3.5 h-3.5 text-champagne" />
-            <span>Artisanal Excellence • Insured Transit</span>
+          <div className="text-[11px] text-ivory/50 flex items-center justify-between relative z-10">
+            <span>Authentic Hallmarked Craft</span>
+            <span>•</span>
+            <span>Mumbai Atelier</span>
           </div>
         </div>
 
@@ -191,7 +227,7 @@ export const Auth = ({ initialMode = 'login' }) => {
         <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
           
           {/* Tabs */}
-          <div className="flex border-b border-sand-border mb-8">
+          <div className="flex border-b border-sand-border mb-6">
             <button
               type="button"
               onClick={() => {
@@ -229,6 +265,45 @@ export const Auth = ({ initialMode = 'login' }) => {
             </button>
           </div>
 
+          {/* Social Google Login Button */}
+          {!showForgotPassword && (
+            <div className="mb-5 space-y-3">
+              <button
+                type="button"
+                onClick={handleGoogleSocialLogin}
+                className="w-full py-2.5 px-4 bg-white border border-sand-border hover:border-champagne/80 hover:bg-sand/20 rounded-[3px] text-xs font-semibold text-espresso flex items-center justify-center gap-3 transition-all duration-200 shadow-sm cursor-pointer"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  />
+                </svg>
+                <span>Continue with Google</span>
+              </button>
+
+              <div className="relative flex items-center justify-center my-3">
+                <div className="border-t border-sand-border/80 w-full" />
+                <span className="bg-brandWhite px-3 text-[10px] uppercase tracking-wider text-espresso/45 font-medium">
+                  Or continue with email
+                </span>
+                <div className="border-t border-sand-border/80 w-full" />
+              </div>
+            </div>
+          )}
+
           {/* 1. SIGN IN FORM */}
           {mode === 'login' && !showForgotPassword && (
             <form onSubmit={handleLoginSubmit} className="space-y-4 animate-fade-in">
@@ -237,14 +312,14 @@ export const Auth = ({ initialMode = 'login' }) => {
                   Email Address or Mobile Number
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
                     type="text"
                     required
                     value={loginIdentifier}
                     onChange={(e) => setLoginIdentifier(e.target.value)}
                     placeholder="name@example.com or +91..."
-                    className="w-full text-xs pl-10 pr-3.5 py-3 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                    className="w-full text-xs pl-10 pr-3.5 py-3 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                   />
                 </div>
               </div>
@@ -263,19 +338,19 @@ export const Auth = ({ initialMode = 'login' }) => {
                   </button>
                 </div>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
                     type={showLoginPassword ? 'text' : 'password'}
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full text-xs pl-10 pr-10 py-3 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                    className="w-full text-xs pl-10 pr-10 py-3 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                   />
                   <button
                     type="button"
                     onClick={() => setShowLoginPassword(!showLoginPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-espresso/40 hover:text-espresso p-0.5"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-espresso/40 hover:text-espresso p-0.5 cursor-pointer"
                     aria-label="Toggle password visibility"
                   >
                     {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -284,7 +359,7 @@ export const Auth = ({ initialMode = 'login' }) => {
               </div>
 
               <div className="flex items-center justify-between pt-1 text-xs">
-                <label className="flex items-center gap-2 cursor-pointer text-espresso/75">
+                <label className="flex items-center gap-2 cursor-pointer text-espresso/75 select-none">
                   <input
                     type="checkbox"
                     checked={rememberMe}
@@ -298,21 +373,32 @@ export const Auth = ({ initialMode = 'login' }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[2px] hover:bg-espresso-light transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-70 mt-2"
+                className="w-full py-3.5 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[3px] hover:bg-espresso-light transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg disabled:opacity-70 mt-2"
               >
                 <span>{loading ? 'Authenticating...' : 'Sign In to Account'}</span>
                 {!loading && <ArrowRight className="w-3.5 h-3.5 text-champagne" />}
               </button>
 
-              {/* Demo 1-Click Login for Fast Testing */}
-              <div className="pt-4 border-t border-sand-border/80">
+              {/* Demo 1-Click Login */}
+              <div className="pt-3 border-t border-sand-border/80">
                 <button
                   type="button"
                   onClick={handleDemoLogin}
-                  className="w-full py-2.5 px-3 border border-champagne/40 bg-sand/20 hover:bg-sand/40 text-espresso text-[11px] font-semibold rounded-[2px] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-2.5 px-3 border border-champagne/40 bg-sand/20 hover:bg-sand/40 text-espresso text-[11px] font-semibold rounded-[3px] transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-champagne-dark" />
-                  <span>Instant Demo Sign In (Khushboo Shah)</span>
+                  <span>⚡ Instant Demo Patron Sign In (Khushboo Shah)</span>
+                </button>
+              </div>
+
+              <div className="text-center pt-2 text-xs text-espresso/70">
+                <span>New patron to Zewar? </span>
+                <button
+                  type="button"
+                  onClick={() => setMode('register')}
+                  className="text-champagne-dark font-semibold hover:underline cursor-pointer"
+                >
+                  Create an account
                 </button>
               </div>
             </form>
@@ -326,14 +412,14 @@ export const Auth = ({ initialMode = 'login' }) => {
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <User className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
                     type="text"
                     required
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
                     placeholder="e.g. Khushboo Shah"
-                    className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                    className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                   />
                 </div>
               </div>
@@ -344,14 +430,14 @@ export const Auth = ({ initialMode = 'login' }) => {
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Mail className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                       type="email"
                       required
                       value={regEmail}
                       onChange={(e) => setRegEmail(e.target.value)}
                       placeholder="client@zewar.com"
-                      className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                      className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                     />
                   </div>
                 </div>
@@ -361,37 +447,39 @@ export const Auth = ({ initialMode = 'login' }) => {
                     Mobile Number
                   </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Phone className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                       type="tel"
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
                       placeholder="+91 98765 43210"
-                      className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                      className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                     />
                   </div>
                 </div>
               </div>
 
+              {/* Password Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] uppercase tracking-wider text-espresso/70 mb-1 font-semibold">
-                    Create Password
+                    Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                       type={showRegPassword ? 'text' : 'password'}
                       required
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="Min 6 characters"
-                      className="w-full text-xs pl-10 pr-9 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                      className="w-full text-xs pl-10 pr-9 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                     />
                     <button
                       type="button"
                       onClick={() => setShowRegPassword(!showRegPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-espresso/40 hover:text-espresso p-0.5"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-espresso/40 hover:text-espresso p-0.5 cursor-pointer"
+                      aria-label="Toggle password visibility"
                     >
                       {showRegPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
@@ -403,21 +491,44 @@ export const Auth = ({ initialMode = 'login' }) => {
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
-                      type={showRegPassword ? 'text' : 'password'}
+                      type={showRegConfirmPassword ? 'text' : 'password'}
                       required
                       value={regConfirmPassword}
                       onChange={(e) => setRegConfirmPassword(e.target.value)}
-                      placeholder="Confirm password"
-                      className="w-full text-xs pl-10 pr-3.5 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition-colors"
+                      placeholder="Re-enter password"
+                      className="w-full text-xs pl-10 pr-9 py-2.5 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20 transition-all font-sans"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-espresso/40 hover:text-espresso p-0.5 cursor-pointer"
+                      aria-label="Toggle password visibility"
+                    >
+                      {showRegConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
                   </div>
                 </div>
               </div>
 
+              {/* Password Strength Indicator */}
+              {regPassword && (
+                <div className="space-y-1 pt-0.5">
+                  <div className="flex items-center justify-between text-[10px]">
+                    <span className="text-espresso/60">Password strength</span>
+                    <span className="font-semibold text-espresso">{passwordStrength.label}</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 h-1">
+                    <div className={`h-full rounded-full transition-all ${passwordStrength.score >= 1 ? passwordStrength.color : 'bg-sand'}`} />
+                    <div className={`h-full rounded-full transition-all ${passwordStrength.score >= 2 ? passwordStrength.color : 'bg-sand'}`} />
+                    <div className={`h-full rounded-full transition-all ${passwordStrength.score >= 3 ? passwordStrength.color : 'bg-sand'}`} />
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-2 pt-1 text-xs">
-                <label className="flex items-start gap-2 cursor-pointer text-espresso/70">
+                <label className="flex items-start gap-2 cursor-pointer text-espresso/70 select-none">
                   <input
                     type="checkbox"
                     checked={newsletterOptIn}
@@ -425,7 +536,7 @@ export const Auth = ({ initialMode = 'login' }) => {
                     className="w-3.5 h-3.5 accent-champagne rounded cursor-pointer mt-0.5"
                   />
                   <span className="text-[11px] leading-relaxed">
-                    Receive exclusive invitations to private festive previews, bespoke auctions, and new arrivals.
+                    Receive invitations to private collection previews, seasonal gifting edits, and bespoke private sales.
                   </span>
                 </label>
               </div>
@@ -433,11 +544,22 @@ export const Auth = ({ initialMode = 'login' }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[2px] hover:bg-espresso-light transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-70 mt-3"
+                className="w-full py-3.5 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[3px] hover:bg-espresso-light transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg disabled:opacity-70 mt-3"
               >
-                <span>{loading ? 'Registering Account...' : 'Create Account'}</span>
+                <span>{loading ? 'Creating Account...' : 'Create Patron Account'}</span>
                 {!loading && <ArrowRight className="w-3.5 h-3.5 text-champagne" />}
               </button>
+
+              <div className="text-center pt-2 text-xs text-espresso/70">
+                <span>Already have a patron account? </span>
+                <button
+                  type="button"
+                  onClick={() => setMode('login')}
+                  className="text-champagne-dark font-semibold hover:underline cursor-pointer"
+                >
+                  Sign in
+                </button>
+              </div>
             </form>
           )}
 
@@ -456,14 +578,14 @@ export const Auth = ({ initialMode = 'login' }) => {
                       Registered Email
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <Mail className="w-4 h-4 text-espresso/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                       <input
                         type="email"
                         required
                         value={forgotEmail}
                         onChange={(e) => setForgotEmail(e.target.value)}
                         placeholder="client@zewar.com"
-                        className="w-full text-xs pl-10 pr-3.5 py-3 bg-ivory/30 text-espresso border border-sand-border rounded-[2px] outline-none focus:border-champagne focus:ring-1 focus:ring-champagne"
+                        className="w-full text-xs pl-10 pr-3.5 py-3 bg-ivory/30 text-espresso border border-sand-border rounded-[3px] outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/20"
                       />
                     </div>
                   </div>
@@ -472,20 +594,20 @@ export const Auth = ({ initialMode = 'login' }) => {
                     <button
                       type="button"
                       onClick={() => setShowForgotPassword(false)}
-                      className="px-5 py-3 border border-sand-border text-espresso text-xs font-semibold uppercase tracking-wider rounded-[2px] hover:bg-sand/30"
+                      className="px-5 py-3 border border-sand-border text-espresso text-xs font-semibold uppercase tracking-wider rounded-[3px] hover:bg-sand/30 cursor-pointer"
                     >
                       Back
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-3 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[2px] hover:bg-espresso-light"
+                      className="flex-1 py-3 bg-espresso text-ivory text-xs uppercase tracking-widest font-semibold rounded-[3px] hover:bg-espresso-light cursor-pointer shadow-sm"
                     >
                       Send Reset Instructions
                     </button>
                   </div>
                 </form>
               ) : (
-                <div className="p-6 bg-sand/30 border border-sand-border rounded text-center space-y-3">
+                <div className="p-6 bg-sand/30 border border-sand-border rounded-[3px] text-center space-y-3">
                   <CheckCircle2 className="w-8 h-8 text-emerald-700 mx-auto" />
                   <p className="text-xs font-semibold text-espresso">Reset Link Dispatched</p>
                   <p className="text-xs text-espresso/70">
@@ -497,7 +619,7 @@ export const Auth = ({ initialMode = 'login' }) => {
                       setShowForgotPassword(false);
                       setForgotSent(false);
                     }}
-                    className="text-xs text-champagne-dark font-semibold hover:underline"
+                    className="text-xs text-champagne-dark font-semibold hover:underline cursor-pointer"
                   >
                     Return to Sign In
                   </button>
@@ -507,7 +629,7 @@ export const Auth = ({ initialMode = 'login' }) => {
           )}
 
           {/* Guest Browsing Link */}
-          <div className="pt-6 mt-6 border-t border-sand-border/70 text-center text-xs text-espresso/60">
+          <div className="pt-5 mt-6 border-t border-sand-border/70 text-center text-xs text-espresso/60">
             <span>Prefer to browse first? </span>
             <Link to="/shop" className="text-champagne-dark font-semibold hover:underline">
               Explore Collections
