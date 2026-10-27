@@ -4,20 +4,21 @@ import { useFestiveMode } from '../../../hooks/useFestiveMode';
 
 /**
  * Calm Background Music Player with dual mode:
- * 1. Primary: Rich acoustic calm ambient soundtrack (/audio/calm-music.wav)
+ * 1. Primary: Rich luxury music soundtrack (/audio/calm-music.mp3)
  * 2. Fallback: Procedural Web Audio API ambient acoustic chord & chime generator
- * 100% royalty-free, pauses on tab blur, opt-in only.
+ * Starts automatically when user enters website, plays continuously in a loop, pauses on tab blur.
  */
 export const FestiveAmbience = () => {
   const { canShowAmbience } = useFestiveMode();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.3);
+  const [volume, setVolume] = useState(0.35);
 
   const audioRef = useRef(null);
   const audioCtxRef = useRef(null);
   const gainNodeRef = useRef(null);
   const proceduralTimerRef = useRef(null);
   const oscillatorsRef = useRef([]);
+  const hasUserPausedRef = useRef(false);
 
   // Procedural Calm Music Synthesizer (Fallback / Real-Time Generator)
   const startProceduralMusic = () => {
@@ -48,17 +49,8 @@ export const FestiveAmbience = () => {
       delayFilter.connect(delay);
       delay.connect(masterGain);
 
-      // Warm background chords (Dmaj9 -> Gmaj7 -> Bm9 -> Aadd9)
-      const chordProgressions = [
-        [146.83, 185.0, 220.0, 277.18],  // Dmaj9
-        [98.0, 146.83, 185.0, 246.94],   // Gmaj7
-        [123.47, 146.83, 185.0, 220.0],  // Bm9
-        [110.0, 164.81, 220.0, 277.18]   // Aadd9
-      ];
-      let currentChordIdx = 0;
-
       // Gentle plucked acoustic chimes
-      const melodyPitches = [293.66, 369.99, 440.0, 493.88, 554.37, 587.33, 739.99]; // D4, F#4, A4, B4, C#5, D5, F#5
+      const melodyPitches = [293.66, 369.99, 440.0, 493.88, 554.37, 587.33, 739.99];
 
       const triggerPluck = () => {
         if (!audioCtxRef.current) return;
@@ -71,13 +63,11 @@ export const FestiveAmbience = () => {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(pitch, now);
 
-        // Warm harmonic overtone
         const overtone = ctx.createOscillator();
         const overGain = ctx.createGain();
         overtone.type = 'triangle';
         overtone.frequency.setValueAtTime(pitch * 2, now);
 
-        // Envelope: soft attack + long natural decay
         oscGain.gain.setValueAtTime(0.0001, now);
         oscGain.gain.linearRampToValueAtTime(0.08, now + 0.02);
         oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
@@ -99,7 +89,6 @@ export const FestiveAmbience = () => {
         overtone.stop(now + 2.0);
       };
 
-      // Periodic chord & melody loop
       const runCycle = () => {
         triggerPluck();
         if (Math.random() > 0.4) {
@@ -140,7 +129,7 @@ export const FestiveAmbience = () => {
   };
 
   const startAudio = () => {
-    // Try native HTML5 audio file first
+    hasUserPausedRef.current = false;
     if (audioRef.current) {
       audioRef.current.volume = volume;
       const playPromise = audioRef.current.play();
@@ -150,7 +139,6 @@ export const FestiveAmbience = () => {
             setIsPlaying(true);
           })
           .catch(() => {
-            // Autoplay or loading issue, fallback to Web Audio generator
             startProceduralMusic();
           });
       }
@@ -160,12 +148,68 @@ export const FestiveAmbience = () => {
   };
 
   const stopAudio = () => {
+    hasUserPausedRef.current = true;
     if (audioRef.current) {
       audioRef.current.pause();
     }
     stopProceduralMusic();
     setIsPlaying(false);
   };
+
+  // Autoplay immediately upon entering the website (or on first interaction if blocked by browser policy)
+  useEffect(() => {
+    if (!canShowAmbience || hasUserPausedRef.current) return;
+
+    let hasStarted = false;
+
+    const attemptAutoplay = () => {
+      if (hasStarted || hasUserPausedRef.current) return;
+      if (audioRef.current) {
+        audioRef.current.volume = volume;
+        const promise = audioRef.current.play();
+        if (promise !== undefined) {
+          promise
+            .then(() => {
+              hasStarted = true;
+              setIsPlaying(true);
+              removeListeners();
+            })
+            .catch(() => {
+              // Browser requires user interaction; keep listeners attached
+            });
+        }
+      }
+    };
+
+    const handleFirstInteraction = () => {
+      if (!hasStarted && !hasUserPausedRef.current) {
+        attemptAutoplay();
+      }
+    };
+
+    const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown', 'scroll'];
+    const addListeners = () => {
+      events.forEach((evt) => {
+        window.addEventListener(evt, handleFirstInteraction, { once: true, passive: true });
+      });
+    };
+
+    const removeListeners = () => {
+      events.forEach((evt) => {
+        window.removeEventListener(evt, handleFirstInteraction);
+      });
+    };
+
+    // 1. Attempt direct unprompted autoplay
+    attemptAutoplay();
+
+    // 2. Fallback to start on first interaction (click/touch/scroll)
+    addListeners();
+
+    return () => {
+      removeListeners();
+    };
+  }, [canShowAmbience, volume]);
 
   // Mute/stop when tab is hidden, resume when visible
   useEffect(() => {
@@ -177,7 +221,7 @@ export const FestiveAmbience = () => {
         if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
           audioCtxRef.current.suspend();
         }
-      } else if (!document.hidden && isPlaying) {
+      } else if (!document.hidden && isPlaying && !hasUserPausedRef.current) {
         if (audioRef.current) {
           audioRef.current.play().catch(() => {});
         }
@@ -194,9 +238,12 @@ export const FestiveAmbience = () => {
   // Clean up when unmounting or when disabled
   useEffect(() => {
     if (!canShowAmbience && isPlaying) {
-      stopAudio();
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      stopProceduralMusic();
+      setIsPlaying(false);
     }
-    return () => stopAudio();
   }, [canShowAmbience]);
 
   // Volume slider update
@@ -215,13 +262,13 @@ export const FestiveAmbience = () => {
 
   return (
     <>
-      {/* Audio element pointing to user's luxury music track with fallback */}
+      {/* Audio element pointing to user's luxury music track with continuous looping */}
       <audio
         ref={audioRef}
         loop
         preload="auto"
         onEnded={() => {
-          if (audioRef.current) {
+          if (audioRef.current && !hasUserPausedRef.current) {
             audioRef.current.currentTime = 0;
             audioRef.current.play().catch(() => {});
           }
@@ -235,8 +282,8 @@ export const FestiveAmbience = () => {
           type="button"
           onClick={isPlaying ? stopAudio : startAudio}
           className="w-8 h-8 rounded-full bg-espresso text-champagne flex items-center justify-center hover:bg-espresso-light hover:scale-105 transition-all shadow-sm cursor-pointer"
-          title={isPlaying ? 'Pause Calm Music' : 'Play Calm Music'}
-          aria-label="Toggle calm background music"
+          title={isPlaying ? 'Pause Music' : 'Play Music'}
+          aria-label="Toggle background music"
         >
           {isPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
         </button>
@@ -245,7 +292,7 @@ export const FestiveAmbience = () => {
         <div className="flex items-center gap-1.5 text-espresso">
           <Music className={`w-3.5 h-3.5 ${isPlaying ? 'text-champagne-dark animate-pulse' : 'text-espresso/40'}`} />
           <span className="font-serif text-[11px] font-medium tracking-wide">
-            Calm Music
+            {isPlaying ? 'Playing Music' : 'Music Paused'}
           </span>
           {isPlaying && (
             <div className="flex items-end gap-0.5 h-3 ml-0.5">

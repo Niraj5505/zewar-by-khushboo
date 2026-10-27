@@ -3,7 +3,7 @@ import { create } from 'zustand';
 const BANNER_STORAGE_KEY = 'zewar.diwali.banner.v1';
 const POPUP_STORAGE_KEY = 'zewar.diwali.popup.v1';
 const OPTOUT_STORAGE_KEY = 'zewar.diwali.optout';
-const PREFS_STORAGE_KEY = 'zewar.diwali.prefs.v1';
+const PREFS_STORAGE_KEY = 'zewar.diwali.prefs.v2';
 const SETTINGS_STORAGE_KEY = 'zewar.diwali.settings.v2';
 
 const getStoredBool = (key, defaultVal = false) => {
@@ -30,7 +30,7 @@ const defaultPrefs = {
   heroScene: true,   // hero lighting + optional 3D
   animations: true,  // shimmer, glow, transitions
   confetti: true,    // burst on add-to-cart / order placed
-  ambience: false,   // soft ambient audio (off by default — opt-in only)
+  ambience: true,    // calm background music (plays automatically on enter)
 };
 
 const storedSettings = getStoredJson(SETTINGS_STORAGE_KEY, {});
