@@ -18,7 +18,6 @@ import { DiwaliBanner } from './components/festive/DiwaliBanner';
 import { DiyaGarland } from './components/festive/ambient/DiyaGarland';
 import { DiwaliPopup } from './components/festive/DiwaliPopup';
 import { DiwaliExitIntent } from './components/festive/overlays/DiwaliExitIntent';
-import { FestiveControls } from './components/festive/FestiveControls';
 
 // Storefront Pages (Standard Load)
 import { Home } from './pages/Home';
@@ -122,7 +121,6 @@ function StorefrontLayout() {
       <PopupRoot />
       <DiwaliPopup />
       <DiwaliExitIntent />
-      <FestiveControls />
       <Toaster />
       <Footer />
     </div>

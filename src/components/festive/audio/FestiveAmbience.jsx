@@ -261,63 +261,19 @@ export const FestiveAmbience = () => {
   if (!canShowAmbience) return null;
 
   return (
-    <>
-      {/* Audio element pointing to user's luxury music track with continuous looping */}
-      <audio
-        ref={audioRef}
-        loop
-        preload="auto"
-        onEnded={() => {
-          if (audioRef.current && !hasUserPausedRef.current) {
-            audioRef.current.currentTime = 0;
-            audioRef.current.play().catch(() => {});
-          }
-        }}
-      >
-        <source src="/audio/calm-music.mp3" type="audio/mpeg" />
-      </audio>
-
-      <div className="fixed bottom-6 right-6 z-40 bg-white/95 backdrop-blur-md border border-sand-border rounded-full py-1.5 px-3 shadow-lg flex items-center gap-2.5 text-xs select-none animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <button
-          type="button"
-          onClick={isPlaying ? stopAudio : startAudio}
-          className="w-8 h-8 rounded-full bg-espresso text-champagne flex items-center justify-center hover:bg-espresso-light hover:scale-105 transition-all shadow-sm cursor-pointer"
-          title={isPlaying ? 'Pause Music' : 'Play Music'}
-          aria-label="Toggle background music"
-        >
-          {isPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-        </button>
-
-        {/* Music Status & Animated Equalizer Bars */}
-        <div className="flex items-center gap-1.5 text-espresso">
-          <Music className={`w-3.5 h-3.5 ${isPlaying ? 'text-champagne-dark animate-pulse' : 'text-espresso/40'}`} />
-          <span className="font-serif text-[11px] font-medium tracking-wide">
-            {isPlaying ? 'Playing Music' : 'Music Paused'}
-          </span>
-          {isPlaying && (
-            <div className="flex items-end gap-0.5 h-3 ml-0.5">
-              <span className="w-0.5 bg-champagne-dark rounded-full animate-bounce" style={{ height: '70%', animationDuration: '600ms' }} />
-              <span className="w-0.5 bg-champagne-dark rounded-full animate-bounce" style={{ height: '100%', animationDuration: '800ms', animationDelay: '150ms' }} />
-              <span className="w-0.5 bg-champagne-dark rounded-full animate-bounce" style={{ height: '50%', animationDuration: '700ms', animationDelay: '300ms' }} />
-            </div>
-          )}
-        </div>
-
-        {isPlaying && (
-          <div className="flex items-center gap-1.5 pl-1 animate-in fade-in duration-200">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={volume}
-              onChange={handleVolumeChange}
-              className="w-16 h-1 accent-champagne cursor-pointer"
-              title="Music volume"
-            />
-          </div>
-        )}
-      </div>
-    </>
+    /* Invisible background audio element with continuous looping */
+    <audio
+      ref={audioRef}
+      loop
+      preload="auto"
+      onEnded={() => {
+        if (audioRef.current && !hasUserPausedRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(() => {});
+        }
+      }}
+    >
+      <source src="/audio/calm-music.mp3" type="audio/mpeg" />
+    </audio>
   );
 };
