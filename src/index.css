@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-ivory: #FAF7F0;
+    --accent-champagne: #C6A15B;
+    --text-espresso: #30251F;
+    --soft-sand: #EAE0D2;
+    --pure-white: #FFFFFF;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #FAF7F0;
+    color: #30251F;
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #FAF7F0;
+    color: #30251F;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #30251F;
+  }
+
+  /* Custom scrollbar matching ivory/champagne aesthetics */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FAF7F0;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #EAE0D2;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C6A15B;
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+
+  .brand-logo-script {
+    font-family: 'Alex Brush', cursive;
+  }
+
+  .brand-subhead {
+    font-family: 'Cormorant Garamond', serif;
+  }
+}
+
+/* Seasonal Festive Tokens (Diwali / Deepavali) */
+:root {
+  --festive-accent: #E8A33D;
+  --festive-deep:   #B33A2B;
+  --festive-glow:   rgba(198, 161, 91, 0.35);
+}
+
+body[data-festive="true"] .btn-gold {
+  box-shadow: 0 0 0 1px #C6A15B, 0 0 12px var(--festive-glow);
+}
+
+@keyframes festiveGlowPulse {
+  0% {
+    box-shadow: 0 0 0 1px #C6A15B, 0 0 14px rgba(198, 161, 91, 0.22);
+  }
+  100% {
+    box-shadow: 0 0 0 1px #C6A15B, 0 0 28px rgba(198, 161, 91, 0.42);
+  }
+}
+
+@keyframes garlandSway {
+  0% { transform: rotate(-0.4deg); }
+  50% { transform: rotate(0.4deg); }
+  100% { transform: rotate(-0.4deg); }
+}
+
+@keyframes floatDiyaRise {
+  0% {
+    transform: translateY(0) scale(0.92);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.42;
+  }
+  85% {
+    opacity: 0.42;
+  }
+  100% {
+    transform: translateY(-680px) scale(1.06);
+    opacity: 0;
+  }
+}
+
+@keyframes rangoliRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes goldShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body[data-festive="true"] * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 28" fill="none">
+  <!-- Hanging Garland Vine/Cord -->
+  <path d="M0 4 Q60 16 120 4 Q180 16 240 4" stroke="#C6A15B" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Repeating Marigold Blooms (alternating warm gold #E8A33D and saffron #F2B84B) -->
+  <g transform="translate(20, 8)">
+    <circle cx="0" cy="0" r="5" fill="#E8A33D"/>
+    <circle cx="0" cy="0" r="3" fill="#F2B84B"/>
+    <circle cx="0" cy="0" r="1.2" fill="#B33A2B"/>
+  </g>
+  <g transform="translate(50, 11)">
+    <circle cx="0" cy="0" r="4.5" fill="#F2B84B"/>
+    <circle cx="0" cy="0" r="2.5" fill="#E8A33D"/>
+  </g>
+  <!-- Mini Diya suspended at center dip -->
+  <g transform="translate(60, 13)">
+    <!-- Tiny flame -->
+    <path d="M0 -5 Q1 -2 0 0 Q-1 -2 0 -5 Z" fill="#E8A33D"/>
+    <!-- Diya cup -->
+    <path d="M-4 0 C-4 3 4 3 4 0 Z" fill="#C6A15B"/>
+  </g>
+  <g transform="translate(85, 10)">
+    <circle cx="0" cy="0" r="5" fill="#E8A33D"/>
+    <circle cx="0" cy="0" r="3" fill="#F2B84B"/>
+  </g>
+  <g transform="translate(120, 6)">
+    <circle cx="0" cy="0" r="4" fill="#F2B84B"/>
+    <circle cx="0" cy="0" r="2" fill="#B33A2B"/>
+  </g>
+  <g transform="translate(155, 10)">
+    <circle cx="0" cy="0" r="5" fill="#E8A33D"/>
+    <circle cx="0" cy="0" r="3" fill="#F2B84B"/>
+  </g>
+  <!-- Mini Diya at second dip -->
+  <g transform="translate(180, 13)">
+    <path d="M0 -5 Q1 -2 0 0 Q-1 -2 0 -5 Z" fill="#E8A33D"/>
+    <path d="M-4 0 C-4 3 4 3 4 0 Z" fill="#C6A15B"/>
+  </g>
+  <g transform="translate(195, 11)">
+    <circle cx="0" cy="0" r="4.5" fill="#F2B84B"/>
+    <circle cx="0" cy="0" r="2.5" fill="#E8A33D"/>
+  </g>
+  <g transform="translate(225, 8)">
+    <circle cx="0" cy="0" r="5" fill="#E8A33D"/>
+    <circle cx="0" cy="0" r="3" fill="#F2B84B"/>
+  </g>
+</svg>

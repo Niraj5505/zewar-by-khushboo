@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Flame with outer and inner radiance -->
+  <path d="M24 4C24 4 19 11 19 15C19 18.3 21.2 21 24 21C26.8 21 29 18.3 29 15C29 11 24 4 24 4Z" fill="#E8A33D"/>
+  <path d="M24 8C24 8 21 13 21 16C21 17.6 22.3 19 24 19C25.7 19 27 17.6 27 16C27 13 24 8 24 8Z" fill="#F2B84B"/>
+  <circle cx="24" cy="16" r="1.5" fill="#FAF7F0"/>
+  <!-- Brass / Terracotta Clay Lamp Base -->
+  <path d="M6 26C6 26 8 36 24 36C40 36 42 26 42 26C42 26 39 28 24 28C9 28 6 26 6 26Z" fill="#C6A15B"/>
+  <path d="M6 26C9 37 24 38 24 38C24 38 39 37 42 26C35 29 24 29 6 26Z" stroke="#A8843F" stroke-width="2" stroke-linecap="round"/>
+  <!-- Pedestal Base -->
+  <path d="M19 38H29C29 38 28 42 24 42C20 42 19 38 19 38Z" fill="#C6A15B" stroke="#A8843F" stroke-width="1.5"/>
+</svg>
