@@ -5,6 +5,7 @@ import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 import { useUIStore } from '../../store/uiStore';
 import { usePopupStore } from '../../store/popupStore';
+import { useAuthStore } from '../../store/authStore';
 import { cn } from '../../lib/cn';
 
 export const Header = () => {
@@ -14,6 +15,7 @@ export const Header = () => {
   const wishlistCount = useWishlistStore((state) => state.items.length);
   const { openCart, openMobileMenu, openSearch } = useUIStore();
   const openPopup = usePopupStore((state) => state.openPopup);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,10 +116,21 @@ export const Header = () => {
             {/* Account Icon */}
             <Link
               to="/account"
-              className="p-1.5 text-espresso/80 hover:text-espresso hover:scale-105 transition-all"
+              className="p-1.5 text-espresso/80 hover:text-espresso hover:scale-105 transition-all flex items-center gap-1.5"
+              title={user?.isLoggedIn ? `Logged in as ${user.name}` : 'Sign In or Register'}
               aria-label="Account"
             >
-              <User className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+              <div className="relative">
+                <User className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                {user?.isLoggedIn && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-600 ring-1 ring-white" />
+                )}
+              </div>
+              {user?.isLoggedIn && user?.name && (
+                <span className="hidden md:inline text-[11px] font-semibold text-espresso truncate max-w-[80px]">
+                  {user.name.split(' ')[0]}
+                </span>
+              )}
             </Link>
 
             {/* Wishlist Icon */}

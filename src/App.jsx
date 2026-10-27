@@ -27,6 +27,7 @@ import { Cart } from './pages/Cart';
 import { Checkout } from './pages/Checkout';
 import { Wishlist } from './pages/Wishlist';
 import { Account } from './pages/Account';
+import { Auth } from './pages/Auth';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
 import { FAQ } from './pages/FAQ';
@@ -142,6 +143,8 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/login" element={<Auth initialMode="login" />} />
+          <Route path="/register" element={<Auth initialMode="register" />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
