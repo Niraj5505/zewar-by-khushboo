@@ -107,13 +107,12 @@ export const Header = () => {
 
           {/* Brand Logo & Wordmark */}
           <div className="flex-1 text-center lg:text-left lg:flex-initial">
-            <Link to="/" className="inline-block group focus:outline-none">
-              <span className="font-serif text-xl sm:text-2xl font-light tracking-[0.18em] text-espresso uppercase group-hover:text-champagne-dark transition-colors">
-                Zewar
-              </span>
-              <span className="block font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.35em] text-espresso/60 -mt-1 group-hover:text-espresso transition-colors">
-                by Khushboo
-              </span>
+            <Link to="/" className="inline-flex items-center group focus:outline-none" aria-label="Zewar by Khushboo">
+              <img
+                src="/images/logo.png"
+                alt="Zewar by Khushboo"
+                className="h-10 sm:h-12 w-auto object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-[1.03]"
+              />
             </Link>
           </div>
 

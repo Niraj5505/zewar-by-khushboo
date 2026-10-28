@@ -37,14 +37,13 @@ export const MobileMenu = () => {
       <div className="relative w-4/5 max-w-xs bg-ivory h-full shadow-2xl flex flex-col justify-between z-10 border-r border-sand-border animate-in slide-in-from-left duration-300">
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-sand-border">
-            <Link to="/" onClick={closeMobileMenu} className="flex flex-col">
-              <span className="font-serif tracking-[0.2em] text-lg font-bold uppercase text-espresso">
-                ZEWAR
-              </span>
-              <span className="brand-logo-script text-base text-champagne">
-                by Khushboo
-              </span>
+          <div className="flex items-center justify-between p-4 border-b border-sand-border">
+            <Link to="/" onClick={closeMobileMenu} className="flex items-center">
+              <img
+                src="/images/logo.png"
+                alt="Zewar by Khushboo"
+                className="h-9 w-auto object-contain mix-blend-multiply"
+              />
             </Link>
             <button
               type="button"

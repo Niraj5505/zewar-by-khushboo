@@ -26,13 +26,12 @@ export const Footer = () => {
           
           {/* Col 1: Brand Info (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            <Link to="/" className="inline-flex flex-col group">
-              <span className="font-serif tracking-[0.25em] text-xl sm:text-2xl font-bold uppercase text-espresso group-hover:text-champagne-dark transition-colors">
-                ZEWAR
-              </span>
-              <span className="brand-logo-script text-base sm:text-lg -mt-1 text-champagne">
-                by Khushboo
-              </span>
+            <Link to="/" className="inline-flex flex-col group" aria-label="Zewar by Khushboo">
+              <img
+                src="/images/logo.png"
+                alt="Zewar by Khushboo"
+                className="h-12 sm:h-14 w-auto object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-[1.02] origin-left"
+              />
             </Link>
             <p className="text-sm text-espresso/70 max-w-sm font-sans leading-relaxed">
               Handmade Jewellery for your beautiful moments. Handcrafted with devotion, celebrating tradition and timeless poise.

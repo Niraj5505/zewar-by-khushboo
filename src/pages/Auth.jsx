@@ -186,9 +186,13 @@ export const Auth = ({ initialMode = 'login' }) => {
               <Sparkles className="w-3 h-3" />
               <span>Privileged Patron Access</span>
             </div>
-            <h2 className="font-serif text-3xl font-light tracking-wide text-ivory">
-              Zewar by Khushboo
-            </h2>
+            <div className="bg-[#FAF7F0] p-2.5 rounded-[4px] inline-block shadow-sm">
+              <img
+                src="/images/logo.png"
+                alt="Zewar by Khushboo"
+                className="h-9 w-auto object-contain mix-blend-multiply"
+              />
+            </div>
             <p className="text-xs text-ivory/70 leading-relaxed font-sans">
               Enter your private sanctuary of handcrafted heritage jewellery, private salon orders, and bespoke tracking.
             </p>
@@ -236,6 +240,17 @@ export const Auth = ({ initialMode = 'login' }) => {
         {/* Right Side: Form & Controls (7 cols) */}
         <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
           
+          {/* Mobile Brand Logo */}
+          <div className="lg:hidden text-center mb-6">
+            <Link to="/" className="inline-block">
+              <img
+                src="/images/logo.png"
+                alt="Zewar by Khushboo"
+                className="h-10 w-auto object-contain mix-blend-multiply mx-auto"
+              />
+            </Link>
+          </div>
+
           {/* Tabs */}
           <div className="flex border-b border-sand-border mb-6">
             <button

@@ -136,17 +136,22 @@ export const Sidebar = () => {
           }`}
           title="Zewar Admin"
         >
-          <div className="w-8 h-8 rounded-[2px] bg-espresso text-champagne flex items-center justify-center font-serif font-bold text-sm shadow-sm flex-shrink-0">
-            Z
-          </div>
-          <div className={`flex flex-col ${isCollapsed ? 'lg:hidden' : 'flex'}`}>
-            <span className="font-serif text-base font-semibold text-espresso tracking-tight leading-none">
-              ZEWAR
-            </span>
-            <span className="font-serif italic text-[10px] text-champagne-dark leading-tight tracking-wider">
-              Admin Panel
-            </span>
-          </div>
+          {isCollapsed ? (
+            <div className="w-8 h-8 rounded-[2px] bg-espresso text-champagne flex items-center justify-center font-serif font-bold text-sm shadow-sm flex-shrink-0">
+              Z
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <img
+                src="/images/logo.png"
+                alt="Zewar by Khushboo"
+                className="h-8 w-auto object-contain mix-blend-multiply"
+              />
+              <span className="font-sans text-[9px] uppercase tracking-widest px-1.5 py-0.5 bg-champagne/20 text-espresso font-semibold rounded-[2px]">
+                Admin
+              </span>
+            </div>
+          )}
         </Link>
 
         {/* Mobile Close Button */}
