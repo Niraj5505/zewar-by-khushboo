@@ -81,7 +81,7 @@ export const Auth = ({ initialMode = 'login' }) => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (!loginIdentifier.trim() || !loginPassword) {
       toast.error('Please enter your email/phone and password.');
@@ -89,19 +89,22 @@ export const Auth = ({ initialMode = 'login' }) => {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const res = login(loginIdentifier, loginPassword);
+    try {
+      const res = await login(loginIdentifier, loginPassword);
       setLoading(false);
       if (res.success) {
         toast.success(`Welcome back, ${res.user.name}!`);
         navigate('/account');
       } else {
-        toast.error('Unable to sign in. Please verify your credentials.');
+        toast.error(res.message || 'Unable to sign in. Please verify your credentials.');
       }
-    }, 350);
+    } catch {
+      setLoading(false);
+      toast.error('Unable to sign in. Please verify your credentials.');
+    }
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
 
     if (!regName.trim()) {
@@ -122,8 +125,8 @@ export const Auth = ({ initialMode = 'login' }) => {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const res = register({
+    try {
+      const res = await register({
         name: regName,
         email: regEmail,
         phone: regPhone || '+91 9876543210',
@@ -137,23 +140,30 @@ export const Auth = ({ initialMode = 'login' }) => {
       } else {
         toast.error(res.message || 'Registration failed.');
       }
-    }, 350);
+    } catch {
+      setLoading(false);
+      toast.error('Registration failed. Please try again.');
+    }
   };
 
-  const handleGoogleSocialLogin = () => {
+  const handleGoogleSocialLogin = async () => {
     setLoading(true);
-    setTimeout(() => {
-      login('khushboo.patron@gmail.com', 'GoogleAuth2026');
-      setLoading(false);
+    const res = await login('khushboo.patron@gmail.com', 'GoogleAuth2026');
+    setLoading(false);
+    if (res.success) {
       toast.success('Signed in seamlessly with Google.');
       navigate('/account');
-    }, 450);
+    }
   };
 
-  const handleDemoLogin = () => {
-    login('khushboo@zewar.com', 'Password123');
-    toast.success('Signed in as Patron Khushboo Shah (Demo)');
-    navigate('/account');
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    const res = await login('khushboo@zewar.com', 'Password123');
+    setLoading(false);
+    if (res.success) {
+      toast.success('Signed in as Patron Khushboo Shah (Demo)');
+      navigate('/account');
+    }
   };
 
   const handleForgotSubmit = (e) => {

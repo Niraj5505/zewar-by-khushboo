@@ -19,6 +19,7 @@ export const useAuthStore = create(
         name: "",
         email: "",
         phone: "",
+        tier: "Royal Patron",
         isLoggedIn: false,
       },
       registeredUsers: initialUsers,
@@ -34,12 +35,35 @@ export const useAuthStore = create(
           phone: "9876543210",
         }
       ],
+      orders: [],
 
-      login: (emailOrPhone, password) => {
-        const users = get().registeredUsers || [];
+      login: async (emailOrPhone, password) => {
         const cleanIdentifier = emailOrPhone.trim().toLowerCase();
 
-        // Find existing matching user
+        // 1. Attempt MongoDB API Login
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ emailOrPhone: cleanIdentifier, password }),
+          });
+          const data = await res.json();
+          if (data.success && data.user) {
+            set({
+              user: data.user,
+              ...(data.addresses && { addresses: data.addresses }),
+              ...(data.orders && { orders: data.orders }),
+            });
+            return { success: true, user: data.user };
+          } else if (res.status === 401 || res.status === 404) {
+            return { success: false, message: data.message || 'Invalid credentials.' };
+          }
+        } catch (err) {
+          console.warn('MongoDB API login unreachable, attempting local fallback:', err);
+        }
+
+        // 2. Resilient Local / Fallback Login
+        const users = get().registeredUsers || [];
         const foundUser = users.find(
           (u) =>
             u.email.toLowerCase() === cleanIdentifier ||
@@ -53,19 +77,19 @@ export const useAuthStore = create(
             name: foundUser.name,
             email: foundUser.email,
             phone: foundUser.phone,
+            tier: 'Royal Patron',
             isLoggedIn: true,
           };
         } else {
-          // Allow seamless login for patrons with valid formatting
           const isEmail = cleanIdentifier.includes('@');
           authenticatedUser = {
             id: `usr-${Date.now()}`,
             name: isEmail ? cleanIdentifier.split('@')[0] : 'Valued Patron',
             email: isEmail ? cleanIdentifier : `${cleanIdentifier}@client.zewar.com`,
             phone: isEmail ? '+91 9876543210' : cleanIdentifier,
+            tier: 'Royal Patron',
             isLoggedIn: true,
           };
-          // Save to registered list
           set((state) => ({
             registeredUsers: [...state.registeredUsers, { ...authenticatedUser, password }],
           }));
@@ -75,11 +99,41 @@ export const useAuthStore = create(
         return { success: true, user: authenticatedUser };
       },
 
-      register: ({ name, email, phone, password }) => {
-        const users = get().registeredUsers || [];
+      register: async ({ name, email, phone, password }) => {
         const cleanEmail = email.trim().toLowerCase();
+        const cleanPhone = phone ? phone.trim() : '+91 9876543210';
 
-        // Check if email already registered
+        // 1. Attempt MongoDB API Registration
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: name.trim(),
+              email: cleanEmail,
+              phone: cleanPhone,
+              password,
+            }),
+          });
+          const data = await res.json();
+          if (data.success && data.user) {
+            set({
+              user: data.user,
+              ...(data.addresses && { addresses: data.addresses }),
+            });
+            return { success: true, user: data.user };
+          } else if (res.status === 409 || !data.success) {
+            return {
+              success: false,
+              message: data.message || 'Unable to register patron account.',
+            };
+          }
+        } catch (err) {
+          console.warn('MongoDB API register unreachable, attempting local fallback:', err);
+        }
+
+        // 2. Resilient Local / Fallback Registration
+        const users = get().registeredUsers || [];
         const existing = users.find((u) => u.email.toLowerCase() === cleanEmail);
         if (existing) {
           return {
@@ -92,8 +146,9 @@ export const useAuthStore = create(
           id: `usr-${Date.now()}`,
           name: name.trim(),
           email: cleanEmail,
-          phone: phone ? phone.trim() : '+91 9876543210',
+          phone: cleanPhone,
           password,
+          tier: 'Royal Patron',
         };
 
         const sessionUser = {
@@ -101,6 +156,7 @@ export const useAuthStore = create(
           name: newUser.name,
           email: newUser.email,
           phone: newUser.phone,
+          tier: newUser.tier,
           isLoggedIn: true,
         };
 
@@ -112,17 +168,29 @@ export const useAuthStore = create(
         return { success: true, user: sessionUser };
       },
 
-      updateProfile: (updatedData) => {
-        set((state) => {
-          const updatedUser = { ...state.user, ...updatedData };
-          const updatedUsers = state.registeredUsers.map((u) =>
-            u.id === state.user?.id ? { ...u, ...updatedData } : u
-          );
-          return {
-            user: updatedUser,
-            registeredUsers: updatedUsers,
-          };
-        });
+      updateProfile: async (updatedData) => {
+        const currentUser = get().user;
+        const updatedUser = { ...currentUser, ...updatedData };
+        set((state) => ({
+          user: updatedUser,
+          registeredUsers: state.registeredUsers.map((u) =>
+            u.id === currentUser?.id ? { ...u, ...updatedData } : u
+          ),
+        }));
+
+        try {
+          await fetch('/api/auth/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: currentUser?.id,
+              email: currentUser?.email,
+              updatedData,
+            }),
+          });
+        } catch (err) {
+          console.warn('Could not sync profile to MongoDB:', err);
+        }
         return { success: true };
       },
 
@@ -133,15 +201,31 @@ export const useAuthStore = create(
             name: "",
             email: "",
             phone: "",
+            tier: "Royal Patron",
             isLoggedIn: false,
           }
         });
       },
 
-      addAddress: (address) => {
-        set((state) => ({
-          addresses: [...state.addresses, { ...address, id: `addr-${Date.now()}` }],
-        }));
+      addAddress: async (address) => {
+        const newAddr = { ...address, id: `addr-${Date.now()}` };
+        const updatedAddresses = [...get().addresses, newAddr];
+        set({ addresses: updatedAddresses });
+
+        const currentUser = get().user;
+        try {
+          await fetch('/api/auth/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: currentUser?.id,
+              email: currentUser?.email,
+              updatedData: { addresses: updatedAddresses },
+            }),
+          });
+        } catch (err) {
+          console.warn('Could not sync addresses to MongoDB:', err);
+        }
       },
     }),
     {
